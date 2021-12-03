@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<PackageId>Bettermage.ConsoleUtils.ControlsHandler</PackageId>
+		<PackageVersion>0.0.2</PackageVersion>
+		<Title>Console Controls Handler</Title>
+		<Authors>Bettermage</Authors>
+		<Description>Handler of custom user defined controls for console applications based on question/confirm/answer system</Description>
+		<Copyright>Copyright (c) Bettermage 2021</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Questions" />
+	</ItemGroup>
+
+</Project>
