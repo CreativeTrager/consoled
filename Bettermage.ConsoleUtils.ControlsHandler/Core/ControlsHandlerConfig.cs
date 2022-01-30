@@ -7,14 +7,9 @@ using Bettermage.ConsoleUtils.ControlsHandler.Interfaces;
 
 
 namespace Bettermage.ConsoleUtils.ControlsHandler.Core;
-public sealed class ControlsHandlerConfig <THandleable, TControlsHandlerBundle> 
+public sealed class ControlsHandlerConfig <THandleable> 
 where THandleable : class, IControlsHandlerHandleable
-where TControlsHandlerBundle: class, IControlsHandlerBundle 
 {
-	public THandleable Handleable { get; init; }
-	public TControlsHandlerBundle Bundle { get; init; }
-
-	public Dictionary<string[],
-		Action<THandleable, TControlsHandlerBundle>
-	> Commands { get; init; }
+	public bool AskForConfirmation { get; init; }
+	public Dictionary<string[], Action<THandleable>> Commands { get; init; }
 }

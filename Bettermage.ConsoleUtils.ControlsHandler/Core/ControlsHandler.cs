@@ -5,16 +5,17 @@ using Bettermage.ConsoleUtils.ControlsHandler.Questions.PredefinedAnswersQuestio
 
 
 namespace Bettermage.ConsoleUtils.ControlsHandler.Core;
-public sealed class ControlsHandler<THandleable, THandlerBundle>
-where THandleable : class, IControlsHandlerHandleable
-where THandlerBundle : class, IControlsHandlerBundle 
+public sealed class ControlsHandler<THandleable>
+where THandleable : class, IControlsHandlerHandleable 
 {
-	private readonly ControlsHandlerConfig
-		<THandleable, THandlerBundle> _rConfig;
+	private readonly THandleable _handleable;
+	private readonly ControlsHandlerConfig<THandleable> _rConfig;
 
-	public ControlsHandler(ControlsHandlerConfig
-		<THandleable, THandlerBundle> config) 
+	public ControlsHandler(THandleable handleable, 
+		ControlsHandlerConfig<THandleable> config
+	) 
 	{
+		this._handleable = handleable;
 		this._rConfig = config;
 	}
 
@@ -27,16 +28,18 @@ where THandlerBundle : class, IControlsHandlerBundle
 				answers: _rConfig.Commands.Keys.ToArray()
 			).Ask().Answer;
 
-			var confirm = new YesNoQuestion(
-				question: $"Are you sure?"
-			).Ask().Is(answers => answers.Yes);
+			var confirm = true;
+			if(_rConfig.AskForConfirmation is true) 
+			{
+				confirm = new YesNoQuestion(
+					question: $"Are you sure?"
+				).Ask().Is(answers => answers.Yes);
+			}
 
 			if(confirm) 
 			{
-				_rConfig.Commands[answer].Invoke(
-					_rConfig.Handleable,
-					_rConfig.Bundle
-				);
+				_rConfig.Commands[answer]
+					.Invoke(_handleable);
 			}
 		}
 		// ReSharper disable once FunctionNeverReturns

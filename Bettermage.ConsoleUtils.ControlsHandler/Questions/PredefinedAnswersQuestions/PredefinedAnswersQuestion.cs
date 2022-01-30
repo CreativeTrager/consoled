@@ -46,12 +46,8 @@ internal sealed class PredefinedAnswersQuestion : IPredefinedAnswersQuestion
 					.ToString()
 			);
 
-			var input = (
-				Console.ReadLine() ??
-				string.Empty
-			).Trim().ToLower();
-
-			var answerWithAliases = rAnswers.SingleOrDefault(
+			var input = Console.ReadLine()!.ToLower();
+			var answerWithAliases = rAnswers.FirstOrDefault(
 				answerWithAliases => answerWithAliases.Contains(input)
 			);
 
