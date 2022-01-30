@@ -1,7 +1,5 @@
-﻿namespace Bettermage.ConsoleUtils.ControlsHandler.Interfaces 
+﻿namespace Bettermage.ConsoleUtils.ControlsHandler.Interfaces;
+public interface IControlsHandlerHandleable 
 {
-	public interface IControlsHandlerHandleable 
-	{
-		// empty
-	}
+	// empty
 }
