@@ -4,51 +4,44 @@ using Bettermage.ConsoleUtils.ControlsHandler.Questions.HardcodedAnswersQuestion
 using Bettermage.ConsoleUtils.ControlsHandler.Questions.PredefinedAnswersQuestions;
 
 
-// ReSharper disable MissingIndent
-// ReSharper disable ReturnTypeCanBeEnumerable.Local
-
-
-namespace Bettermage.ConsoleUtils.ControlsHandler.Core 
+namespace Bettermage.ConsoleUtils.ControlsHandler.Core;
+public sealed class ControlsHandler<THandleable>
+where THandleable : class, IControlsHandlerHandleable 
 {
-	public sealed class ControlsHandler
-	<THandleable, THandlerBundle>
-	
-	where THandleable : class, IControlsHandlerHandleable
-	where THandlerBundle : class, IControlsHandlerBundle
+	private readonly THandleable _handleable;
+	private readonly ControlsHandlerConfig<THandleable> _rConfig;
 
-	
+	public ControlsHandler(THandleable handleable, 
+		ControlsHandlerConfig<THandleable> config
+	) 
 	{
-		private readonly ControlsHandlerConfig
-			<THandleable, THandlerBundle> _rConfig;
-		
-		public ControlsHandler(ControlsHandlerConfig
-			<THandleable, THandlerBundle> config) 
-		{
-			this._rConfig = config;
-		}
+		this._handleable = handleable;
+		this._rConfig = config;
+	}
 
-		public void Handle() 
+	public void Handle() 
+	{
+		while(true) 
 		{
-			while(true) 
+			var answer = new PredefinedAnswersQuestion(
+				question: $"Enter command",
+				answers: _rConfig.Commands.Keys.ToArray()
+			).Ask().Answer;
+
+			var confirm = true;
+			if(_rConfig.AskForConfirmation is true) 
 			{
-				var answer = new PredefinedAnswersQuestion(
-					question: $"Enter command",
-					answers: _rConfig.Commands.Keys.ToArray()
-				).Ask().Answer;
-
-				var confirm = new YesNoQuestion(
+				confirm = new YesNoQuestion(
 					question: $"Are you sure?"
 				).Ask().Is(answers => answers.Yes);
-
-				if(confirm) 
-				{
-					_rConfig.Commands[answer].Invoke(
-						_rConfig.Handleable,
-						_rConfig.Bundle
-					);
-				}
 			}
-			// ReSharper disable once FunctionNeverReturns
+
+			if(confirm) 
+			{
+				_rConfig.Commands[answer]
+					.Invoke(_handleable);
+			}
 		}
+		// ReSharper disable once FunctionNeverReturns
 	}
 }

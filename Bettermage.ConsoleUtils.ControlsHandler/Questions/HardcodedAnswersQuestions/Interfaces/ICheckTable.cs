@@ -1,7 +1,5 @@
-﻿namespace Bettermage.ConsoleUtils.ControlsHandler.Questions.HardcodedAnswersQuestions.Interfaces 
+﻿namespace Bettermage.ConsoleUtils.ControlsHandler.Questions.HardcodedAnswersQuestions.Interfaces;
+public interface ICheckTable 
 {
-	public interface ICheckTable 
-	{
-		// empty
-	}
+	// empty
 }

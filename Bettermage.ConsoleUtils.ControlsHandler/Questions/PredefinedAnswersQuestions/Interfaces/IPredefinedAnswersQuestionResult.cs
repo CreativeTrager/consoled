@@ -1,7 +1,5 @@
-﻿namespace Bettermage.ConsoleUtils.ControlsHandler.Questions.PredefinedAnswersQuestions.Interfaces 
+﻿namespace Bettermage.ConsoleUtils.ControlsHandler.Questions.PredefinedAnswersQuestions.Interfaces;
+public interface IPredefinedAnswersQuestionResult 
 {
-	public interface IPredefinedAnswersQuestionResult 
-	{
-		string[] Answer { get; init; }
-	}
+	string[] Answer { get; init; }
 }

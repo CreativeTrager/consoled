@@ -3,43 +3,34 @@ using Bettermage.ConsoleUtils.ControlsHandler.Questions.PredefinedAnswersQuestio
 using Bettermage.ConsoleUtils.ControlsHandler.Questions.PredefinedAnswersQuestions.Interfaces;
 
 
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable MissingIndent
-
-
-namespace Bettermage.ConsoleUtils.ControlsHandler.Questions.HardcodedAnswersQuestions 
+namespace Bettermage.ConsoleUtils.ControlsHandler.Questions.HardcodedAnswersQuestions;
+internal sealed class YesNoQuestion : IHardcodedAnswersQuestion<YesNoQuestion.YesNoAnswersTable> 
 {
-	internal sealed class YesNoQuestion
-	: IHardcodedAnswersQuestion
-	  <YesNoQuestion.YesNoAnswersTable> 
+	internal sealed class YesNoAnswersTable : ICheckTable 
 	{
-		internal sealed class YesNoAnswersTable
-		: ICheckTable 
-		{
-			internal string[] Yes { get; } = { "yes", "y" };
-			internal string[] No { get; } = { "no", "n" };
-		}
+		internal string[] Yes { get; } = { "yes", "y" };
+		internal string[] No  { get; } = { "no", "n" };
+	}
 
-		private readonly PredefinedAnswersQuestion _rPredefinedAnswersQuestion;
-		internal YesNoQuestion(string question) 
-		{
-			var answerTable = new YesNoAnswersTable();
-			this._rPredefinedAnswersQuestion = new (
-				question,
-				answerTable.Yes,
-				answerTable.No
-			);
-		}
+	private readonly PredefinedAnswersQuestion _rPredefinedAnswersQuestion;
+	internal YesNoQuestion(string question) 
+	{
+		var answerTable = new YesNoAnswersTable();
+		this._rPredefinedAnswersQuestion = new (
+			question,
+			answerTable.Yes,
+			answerTable.No
+		);
+	}
 
-		public IHardcodedAnswersQuestionResult<YesNoAnswersTable> Ask() 
-		{
-			return new HardcodedAnswersQuestionResult<YesNoAnswersTable>() {
-				Answer = _rPredefinedAnswersQuestion.Ask().Answer
-			};
-		}
-		IPredefinedAnswersQuestionResult IPredefinedAnswersQuestionBehaviour.Ask() 
-		{
-			return Ask();
-		}
+	public IHardcodedAnswersQuestionResult<YesNoAnswersTable> Ask() 
+	{
+		return new HardcodedAnswersQuestionResult<YesNoAnswersTable>() {
+			Answer = _rPredefinedAnswersQuestion.Ask().Answer
+		};
+	}
+	IPredefinedAnswersQuestionResult IPredefinedAnswersQuestionBehaviour.Ask() 
+	{
+		return Ask();
 	}
 }
