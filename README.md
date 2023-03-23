@@ -1,2 +1,2 @@
-# Bettermage Console Utils
-Console-based application utility package that provides a set of out-of-the-box interfaces to handle various uses of the command line interface.
+# Console Utils
+Console-based utility that provides functionality to handle various use cases of the command line interface.
