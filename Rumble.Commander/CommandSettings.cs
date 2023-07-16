@@ -18,6 +18,15 @@ public sealed class CommandSettings
 	public List<string> Aliases { get; set; }
 
 	/// <summary>
+	/// Flag that indicates whether to ask for confirmation before the command execution.
+	/// </summary>
+	/// <remarks>
+	/// Controlled by <see cref="ICommander"/> by default.
+	/// Set the value to override the default behavior for this particular command.
+	/// </remarks>
+	public bool? AskForConfirmation { get; set; }
+
+	/// <summary>
 	/// Confirmation prompt.
 	/// </summary>
 	/// <remarks>
@@ -45,18 +54,9 @@ public sealed class CommandSettings
 	public bool? MatchCase { get; set; }
 
 	/// <summary>
-	/// Flag that indicates whether to ask for confirmation before the command execution.
-	/// </summary>
-	/// <remarks>
-	/// Controlled by <see cref="ICommander"/> by default.
-	/// Set the value to override the default behavior for this particular command.
-	/// </remarks>
-	public bool? AskForConfirmation { get; set; }
-
-	/// <summary>
 	/// <see cref="Name"/> with <see cref="Aliases"/> represented in one collection.
 	/// </summary>
-	public IReadOnlyCollection<string> NameWithAliases => new List<string>(collection: Aliases) { Name }.AsReadOnly();
+	public IReadOnlyCollection<string> NameWithAliases => new List<string>() { Name, Aliases }.AsReadOnly();
 
 	///
 	/// <inheritdoc cref="Command" />

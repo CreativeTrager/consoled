@@ -29,7 +29,7 @@ where TCommandable : class, IDisposable
 	///
 	/// <inheritdoc />
 	///
-	public ICommander RunSelf()
+	public ICommander Run()
 	{
 		// while(true)
 		// {

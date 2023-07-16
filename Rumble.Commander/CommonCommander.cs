@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Rumble.Commander.Questions;
+using Rumble.Essentials;
 
 namespace Rumble.Commander;
 
@@ -10,6 +12,7 @@ namespace Rumble.Commander;
 ///
 public sealed class CommonCommander : ICommander
 {
+	private readonly CommanderSettings _settings;
 	/// <summary>
 	/// Default command input prompt.
 	/// </summary>
@@ -19,6 +22,8 @@ public sealed class CommonCommander : ICommander
 	/// Default command confirmation prompt.
 	/// </summary>
 	private const string _defaultCommandConfirmationPrompt = "Are you sure?";
+
+	private bool _exitIsNotRequested;
 
 	/// <summary>
 	/// Flag that indicates whether the aliases of the command should be used.
@@ -48,13 +53,10 @@ public sealed class CommonCommander : ICommander
 	/// </summary>
 	private readonly string _commandConfirmationPrompt;
 
-	private readonly List<Command> _commands;
 	private readonly List<Command> _systemCommands;
 	private readonly List<Command> _customCommands;
 
 	private readonly Dictionary<SystemCommandNameWithAliases, CommandOverride> _systemCommandsOverrides;
-
-	private bool _exitIsNotRequested;
 
 	/// <summary>
 	/// Overrides for system commands.
@@ -92,19 +94,34 @@ public sealed class CommonCommander : ICommander
 					);
 				}
 
-				if(commandOverride.Name is { } name)
+				// if(commandOverride.Name is { } name)
+				// {
+				// 	var formattedName = name.Trim();
+				// 	if(string.IsNullOrWhiteSpace(formattedName))
+				// 	{
+				// 		throw new ApplicationException
+				// 		(
+				// 			$"System command with key \"{key}\" can't be overridden. " +
+				// 			$"The requested name can't be empty or whitespace."
+				// 		);
+				// 	}
+				//
+				// 	commandToOverride.Settings.Name = formattedName;
+				// }
+
+				if(commandOverride.ConfirmationPrompt is { } confirmationPrompt)
 				{
-					var formattedName = name.Trim();
-					if(string.IsNullOrWhiteSpace(formattedName))
+					var formattedConfirmationPrompt = confirmationPrompt.Trim();
+					if(string.IsNullOrWhiteSpace(formattedConfirmationPrompt))
 					{
 						throw new ApplicationException
 						(
 							$"System command with key \"{key}\" can't be overridden. " +
-							$"The requested name can't be empty or whitespace."
+							$"The requested confirmation prompt can't be empty or whitespace."
 						);
 					}
 
-					commandToOverride.Settings.Name = formattedName;
+					commandToOverride.Settings.ConfirmationPrompt = confirmationPrompt;
 				}
 
 				if(commandOverride.UseAliases is { } useAliases)
@@ -129,21 +146,6 @@ public sealed class CommonCommander : ICommander
 				if(commandOverride.AskForConfirmation is { } askForConfirmation)
 				{
 					commandToOverride.Settings.AskForConfirmation = askForConfirmation;
-				}
-
-				if(commandOverride.ConfirmationPrompt is { } confirmationPrompt)
-				{
-					var formattedConfirmationPrompt = confirmationPrompt.Trim();
-					if(string.IsNullOrWhiteSpace(formattedConfirmationPrompt))
-					{
-						throw new ApplicationException
-						(
-							$"System command with key \"{key}\" can't be overridden. " +
-							$"The requested confirmation prompt can't be empty or whitespace."
-						);
-					}
-
-					commandToOverride.Settings.ConfirmationPrompt = confirmationPrompt;
 				}
 			}
 		}
@@ -211,8 +213,9 @@ public sealed class CommonCommander : ICommander
 	///
 	/// <inheritdoc cref="CommonCommander" />
 	///
-	public CommonCommander()
+	public CommonCommander(CommanderSettings settings)
 	{
+		this._settings = settings;
 		this._exitIsNotRequested = true;
 
 		this._matchCase = true;
@@ -222,7 +225,6 @@ public sealed class CommonCommander : ICommander
 		this._commandInputPrompt = CommonCommander._defaultCommandInputPrompt;
 		this._commandConfirmationPrompt = CommonCommander._defaultCommandConfirmationPrompt;
 
-		this._commands = new ();
 		this._customCommands = new ();
 		this._systemCommandsOverrides = new ();
 		this._systemCommands = new ()
@@ -235,6 +237,39 @@ public sealed class CommonCommander : ICommander
 					Name = SystemCommandNameWithAliases.Exit.Name,
 					Aliases = SystemCommandNameWithAliases.Exit.Aliases
 				}
+			},
+			new ()
+			{
+				Action = () =>
+				{
+					settings.Writer.WriteLine
+					(
+						$"{Environment.NewLine}" +
+						$"Help page{Environment.NewLine}" +
+						$"System commands{Environment.NewLine}" +
+						$"\t• {
+
+							this._systemCommands!
+								.Select(command => command.Settings.NameWithAliases.Joined(separator: "/"))
+								.Joined(separator: $"{Environment.NewLine}\t• ")
+
+						}{Environment.NewLine}" +
+						$"Custom commands{Environment.NewLine}" +
+						$"\t• {
+
+							this._customCommands!
+								.Select(command => command.Settings.NameWithAliases.Joined(separator: "/"))
+								.Joined(separator: $"{Environment.NewLine}\t• ")
+
+						}{Environment.NewLine}"
+					);
+				},
+				Settings = new ()
+				{
+					Name = SystemCommandNameWithAliases.Help.Name,
+					Aliases = SystemCommandNameWithAliases.Help.Aliases,
+					AskForConfirmation = false
+				}
 			}
 		};
 	}
@@ -242,12 +277,10 @@ public sealed class CommonCommander : ICommander
 	///
 	/// <inheritdoc />
 	///
-	public ICommander RunSelf()
+	public ICommander Run()
 	{
-		this._commands.AddRange(this._systemCommands);
-		this._commands.AddRange(this._customCommands);
-
-		var commandsWithNames = this._commands.Select(command => (Command: command, Names: new List<string>()
+		var commands = new List<Command>() { this._systemCommands, this._customCommands };
+		var commandsWithNames = commands.Select(command => (Command: command, Names: new List<string>()
 		{
 			command.Settings.Name,
 			command.Settings.UseAliases ?? this._useAliases
@@ -259,8 +292,15 @@ public sealed class CommonCommander : ICommander
 			var commandName = new Question
 			(
 				prompt: this._commandInputPrompt,
-				correctAnswers: commandsWithNames.SelectMany(commandWithNames => commandWithNames.Names)
-			).AskObsessively().Answer;
+				correctAnswers: commandsWithNames.SelectMany(commandWithNames => commandWithNames.Names),
+				settings: new ()
+				{
+					Reader = this._settings.Reader,
+					Writer = this._settings.Writer,
+					ShowHint = true,
+					Hint = $"Unknown command. Type \"{SystemCommandNameWithAliases.Help.Name}\" for help."
+				}
+			).Ask().Answer;
 
 			var commandWithNames = commandsWithNames.FirstOrDefault(commandWithNames => commandWithNames.Names.Contains(commandName));
 			if (commandWithNames is { Command: null })
@@ -268,15 +308,23 @@ public sealed class CommonCommander : ICommander
 				continue;
 			}
 
-			if((commandWithNames.Command.Settings.AskForConfirmation ?? this._askForConfirmation) is false)
+			if(commandWithNames.Command.Settings.AskForConfirmation ?? this._askForConfirmation)
 			{
-				continue;
-			}
+				var confirmationPrompt =
+				(
+					commandWithNames.Command.Settings.ConfirmationPrompt
+					?? this._commandConfirmationPrompt
+				);
 
-			var confirmationPrompt = commandWithNames.Command.Settings.ConfirmationPrompt ?? this._commandConfirmationPrompt;
-			if(new YesNoQuestion(confirmationPrompt).AskObsessively().Is(answers => answers.YesFlat) is false)
-			{
-				continue;
+				if(new YesNoQuestion(confirmationPrompt, new ()
+				{
+					Reader = this._settings.Reader,
+					Writer = this._settings.Writer
+
+				}).Ask().Is(answers => answers.YesFlat) is false)
+				{
+					continue;
+				}
 			}
 
 			commandWithNames.Command.Action.Invoke();
@@ -292,4 +340,10 @@ public sealed class CommonCommander : ICommander
 	{
 		// Empty
 	}
+}
+
+public sealed class CommanderSettings
+{
+	public TextReader Reader { get; init; }
+	public TextWriter Writer { get; init; }
 }

@@ -9,23 +9,23 @@ internal sealed class YesNoQuestion : Question, IQuestion<YesNoQuestion.YesNoAns
 		internal (string Name, string[] Aliases) Yes { get; } = ("yes", new [] { "y" });
 		internal (string Name, string[] Aliases) No  { get; } = ("no" , new [] { "n" });
 
-		internal IReadOnlyCollection<string> YesFlat => new List<string>(collection: Yes.Aliases) { Yes.Name }.AsReadOnly();
-		internal IReadOnlyCollection<string> NoFlat => new List<string>(collection: No.Aliases) { No.Name }.AsReadOnly();
+		internal IReadOnlyCollection<string> YesFlat => new List<string>() { Yes.Name, Yes.Aliases }.AsReadOnly();
+		internal IReadOnlyCollection<string> NoFlat  => new List<string>() { No.Name, No.Aliases }.AsReadOnly();
 		internal IReadOnlyCollection<string> AllFlat => new List<string>() { YesFlat, NoFlat };
 	}
 
-	internal YesNoQuestion(string prompt) : base(prompt, correctAnswers: new YesNoAnswersTable().AllFlat)
+	internal YesNoQuestion(string prompt, QuestionSettings settings) : base(prompt, correctAnswers: new YesNoAnswersTable().AllFlat, settings)
 	{
 		// Empty
 	}
 
-	public IQuestionResult<YesNoAnswersTable> AskObsessively()
+	public IQuestionResult<YesNoAnswersTable> Ask()
 	{
-		return new QuestionResult<YesNoAnswersTable>() { Answer = base.AskObsessively().Answer };
+		return new QuestionResult<YesNoAnswersTable>() { Answer = base.Ask().Answer };
 	}
 
-	IQuestionResult IQuestion.AskObsessively()
+	IQuestionResult IQuestion.Ask()
 	{
-		return AskObsessively();
+		return Ask();
 	}
 }

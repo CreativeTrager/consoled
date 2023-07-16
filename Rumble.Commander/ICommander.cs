@@ -16,5 +16,5 @@ public interface ICommander : IDisposable
 	/// This allows for dynamic and responsive control flow based on the input.
 	/// </summary>
 	/// <returns>The current instance of <see cref="ICommander"/>, allowing for chaining</returns>
-	ICommander RunSelf();
+	ICommander Run();
 }

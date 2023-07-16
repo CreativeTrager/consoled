@@ -8,7 +8,7 @@ internal interface IQuestion
 {
 	string Prompt { get; init; }
 	string[] CorrectAnswers { get; init; }
-	IQuestionResult AskObsessively();
+	IQuestionResult Ask();
 }
 
 internal interface IQuestionResult
@@ -21,7 +21,7 @@ internal interface IQuestionResult
 internal interface IQuestion<TResultCheckTable> : IQuestion
 where TResultCheckTable : ICheckTable
 {
-	new IQuestionResult<TResultCheckTable> AskObsessively();
+	new IQuestionResult<TResultCheckTable> Ask();
 }
 
 internal interface IQuestionResult<TCheckTable> : IQuestionResult, ICheckableResult<TCheckTable>

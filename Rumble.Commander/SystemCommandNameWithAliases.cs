@@ -52,4 +52,9 @@ public sealed class SystemCommandNameWithAliases
 	/// Exit system command used to break out from the <see cref="ICommander"/>'s run loop.
 	/// </summary>
 	public static SystemCommandNameWithAliases Exit => new (name: "exit", aliases: new () { "quit", "q" });
+
+	/// <summary>
+	/// Help system command used to show information about available commands for particular <see cref="ICommander"/>.
+	/// </summary>
+	public static SystemCommandNameWithAliases Help => new (name: "help", aliases: new () { "about", "h" });
 }

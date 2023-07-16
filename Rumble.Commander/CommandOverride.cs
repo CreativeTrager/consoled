@@ -8,14 +8,14 @@ namespace Rumble.Commander;
 public sealed class CommandOverride
 {
 	///
-	/// <inheritdoc cref="CommandSettings.Name"/>
-	///
-	public string? Name { get; init; }
-
-	///
 	/// <inheritdoc cref="CommandSettings.Aliases"/>
 	///
 	public List<string> Aliases { get; init; }
+
+	///
+	/// <inheritdoc cref="CommandSettings.ConfirmationPrompt"/>
+	///
+	public string? ConfirmationPrompt { get; init; }
 
 	///
 	/// <inheritdoc cref="CommandSettings.UseAliases"/>
@@ -31,11 +31,6 @@ public sealed class CommandOverride
 	/// <inheritdoc cref="CommandSettings.AskForConfirmation"/>
 	///
 	public bool? AskForConfirmation { get; init; }
-
-	///
-	/// <inheritdoc cref="CommandSettings.ConfirmationPrompt"/>
-	///
-	public string? ConfirmationPrompt { get; init; }
 
 	///
 	/// <inheritdoc cref="CommandOverride"/>
