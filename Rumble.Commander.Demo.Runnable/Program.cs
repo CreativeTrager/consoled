@@ -15,7 +15,8 @@ using var common = new CommonCommander()
 			Aliases = new () { "exLA" },
 			MatchCase = true,
 			UseAliases = true,
-			AskForConfirmation = true
+			AskForConfirmation = true,
+			ConfirmationPrompt = "Are you sure you want to exit?"
 		}
 	},
 	CustomCommands = new ()
@@ -27,7 +28,8 @@ using var common = new CommonCommander()
 			{
 				Name = "common1",
 				Aliases = new () { "c1" },
-				AskForConfirmation = true
+				AskForConfirmation = true,
+				ConfirmationPrompt = "Are you sure to execute common1?"
 			}
 		},
 		new ()
@@ -43,35 +45,35 @@ using var common = new CommonCommander()
 	}
 }.RunSelf();
 
-using var over = new ObjectCommander<X>(commandable: new X())
-{
-	AskForConfirmation = true,
-	CommandInputPrompt = "Object Enter a command",
-	ConfirmationPrompt = "Object Are you sure?",
-	Commands = new ()
-	{
-		new ()
-		{
-			Action = commandable => { },
-			Settings = new ()
-			{
-				Name = "over1",
-				Aliases = new () { "o1" },
-				AskForConfirmation = true
-			}
-		},
-		new ()
-		{
-			Action = commandable => { },
-			Settings = new ()
-			{
-				Name = "over2",
-				Aliases = new () { "o2" },
-				AskForConfirmation = true
-			}
-		}
-	}
-};
+// using var over = new ObjectCommander<X>(commandable: new X())
+// {
+// 	AskForConfirmation = true,
+// 	CommandInputPrompt = "Object Enter a command",
+// 	ConfirmationPrompt = "Object Are you sure?",
+// 	Commands = new ()
+// 	{
+// 		new ()
+// 		{
+// 			Action = commandable => { },
+// 			Settings = new ()
+// 			{
+// 				Name = "over1",
+// 				Aliases = new () { "o1" },
+// 				AskForConfirmation = true
+// 			}
+// 		},
+// 		new ()
+// 		{
+// 			Action = commandable => { },
+// 			Settings = new ()
+// 			{
+// 				Name = "over2",
+// 				Aliases = new () { "o2" },
+// 				AskForConfirmation = true
+// 			}
+// 		}
+// 	}
+// };
 
 // // using var totalCommander = TotalCommander.Factory.Over(new [] { common, over }, options: new () {}).Run;
 // using var totalCommander = TotalCommander.Factory.Over(common, over, options: new ()
@@ -83,7 +85,6 @@ using var over = new ObjectCommander<X>(commandable: new X())
 
 internal class X : IDisposable
 {
-
 	public void Dispose()
 	{
 
