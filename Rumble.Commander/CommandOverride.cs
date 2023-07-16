@@ -33,6 +33,11 @@ public sealed class CommandOverride
 	public bool? AskForConfirmation { get; init; }
 
 	///
+	/// <inheritdoc cref="CommandSettings.ConfirmationPrompt"/>
+	///
+	public string? ConfirmationPrompt { get; init; }
+
+	///
 	/// <inheritdoc cref="CommandOverride"/>
 	///
 	public CommandOverride()

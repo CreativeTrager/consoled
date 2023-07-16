@@ -18,6 +18,15 @@ public sealed class CommandSettings
 	public List<string> Aliases { get; set; }
 
 	/// <summary>
+	/// Confirmation prompt.
+	/// </summary>
+	/// <remarks>
+	/// Controlled by <see cref="ICommander"/> by default.
+	/// Set the value to override the default value for this particular command.
+	/// </remarks>
+	public string? ConfirmationPrompt { get; set; }
+
+	/// <summary>
 	/// Flag that indicates whether the aliases of the command should be used.
 	/// </summary>
 	/// <remarks>

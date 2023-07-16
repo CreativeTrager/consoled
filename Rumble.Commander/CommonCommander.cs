@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Rumble.Commander.Questions.HardcodedAnswersQuestions;
-using Rumble.Commander.Questions.PredefinedAnswersQuestions;
+using Rumble.Commander.Questions;
 
 namespace Rumble.Commander;
 
@@ -24,16 +23,19 @@ public sealed class CommonCommander : ICommander
 	/// <summary>
 	/// Flag that indicates whether the aliases of the command should be used.
 	/// </summary>
+	/// <remarks><c>True</c> by default</remarks>
 	private readonly bool _useAliases;
 
 	/// <summary>
 	/// Flag that indicates whether the case of the command name or alias should match.
 	/// </summary>
+	/// <remarks><c>True</c> by default</remarks>
 	private readonly bool _matchCase;
 
 	/// <summary>
 	/// Flag that indicates whether to ask for confirmation before the command execution.
 	/// </summary>
+	/// <remarks><c>True</c> by default</remarks>
 	private readonly bool _askForConfirmation;
 
 	/// <summary>
@@ -128,6 +130,21 @@ public sealed class CommonCommander : ICommander
 				{
 					commandToOverride.Settings.AskForConfirmation = askForConfirmation;
 				}
+
+				if(commandOverride.ConfirmationPrompt is { } confirmationPrompt)
+				{
+					var formattedConfirmationPrompt = confirmationPrompt.Trim();
+					if(string.IsNullOrWhiteSpace(formattedConfirmationPrompt))
+					{
+						throw new ApplicationException
+						(
+							$"System command with key \"{key}\" can't be overridden. " +
+							$"The requested confirmation prompt can't be empty or whitespace."
+						);
+					}
+
+					commandToOverride.Settings.ConfirmationPrompt = confirmationPrompt;
+				}
 			}
 		}
 	}
@@ -198,6 +215,10 @@ public sealed class CommonCommander : ICommander
 	{
 		this._exitIsNotRequested = true;
 
+		this._matchCase = true;
+		this._useAliases = true;
+		this._askForConfirmation = true;
+
 		this._commandInputPrompt = CommonCommander._defaultCommandInputPrompt;
 		this._commandConfirmationPrompt = CommonCommander._defaultCommandConfirmationPrompt;
 
@@ -226,29 +247,39 @@ public sealed class CommonCommander : ICommander
 		this._commands.AddRange(this._systemCommands);
 		this._commands.AddRange(this._customCommands);
 
+		var commandsWithNames = this._commands.Select(command => (Command: command, Names: new List<string>()
+		{
+			command.Settings.Name,
+			command.Settings.UseAliases ?? this._useAliases
+				? command.Settings.Aliases : ArraySegment<string>.Empty
+		})).ToList();
+
 		while(this._exitIsNotRequested)
 		{
-			var answer = new PredefinedAnswersQuestion
+			var commandName = new Question
 			(
-				question: this._commandInputPrompt,
-				answers: this._commands.Select(command => command.Settings.NameWithAliases)
-			).Ask().Answer;
+				prompt: this._commandInputPrompt,
+				correctAnswers: commandsWithNames.SelectMany(commandWithNames => commandWithNames.Names)
+			).AskObsessively().Answer;
 
-			var requestConfirmation = true;
-			if(this._askForConfirmation is true)
+			var commandWithNames = commandsWithNames.FirstOrDefault(commandWithNames => commandWithNames.Names.Contains(commandName));
+			if (commandWithNames is { Command: null })
 			{
-				requestConfirmation = new YesNoQuestion(question: this._commandConfirmationPrompt).Ask().Is(answers => answers.Yes.Name);
+				continue;
 			}
 
-			if(requestConfirmation)
+			if((commandWithNames.Command.Settings.AskForConfirmation ?? this._askForConfirmation) is false)
 			{
-				if(this._commands.SingleOrDefault(command => command.Settings.NameWithAliases.Contains(answer)) is not { } command)
-				{
-					throw new ApplicationException();
-				}
-
-				command.Action.Invoke();
+				continue;
 			}
+
+			var confirmationPrompt = commandWithNames.Command.Settings.ConfirmationPrompt ?? this._commandConfirmationPrompt;
+			if(new YesNoQuestion(confirmationPrompt).AskObsessively().Is(answers => answers.YesFlat) is false)
+			{
+				continue;
+			}
+
+			commandWithNames.Command.Action.Invoke();
 		}
 
 		return this;
