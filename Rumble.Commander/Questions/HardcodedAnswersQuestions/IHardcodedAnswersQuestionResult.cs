@@ -1,8 +1,8 @@
 ﻿using Rumble.Commander.Questions.PredefinedAnswersQuestions;
 
-namespace Rumble.Commander.Questions.HardcodedAnswersQuestions.Interfaces;
+namespace Rumble.Commander.Questions.HardcodedAnswersQuestions;
 internal interface IHardcodedAnswersQuestionResult<TCheckTable> : IPredefinedAnswersQuestionResult, ICheckableResult<TCheckTable>
-where TCheckTable : ICheckTable 
+where TCheckTable : ICheckTable
 {
 	// empty
 }

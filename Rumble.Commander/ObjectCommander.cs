@@ -1,33 +1,29 @@
 ﻿using System;
-using System.Linq;
-using Rumble.Commander.Questions.HardcodedAnswersQuestions;
-using Rumble.Commander.Questions.PredefinedAnswersQuestions;
+using System.Collections.Generic;
 
 namespace Rumble.Commander;
 
 ///
 /// <inheritdoc />
 ///
-/// <typeparam name="TCommandable">Type of the commandable object over which the <see cref="ObjectCommander{TCommandable}"/> operates</typeparam>
+/// <typeparam name="TCommandable">Type of a commandable object over which an <see cref="ObjectCommander{TCommandable}"/> operates</typeparam>
 public sealed class ObjectCommander<TCommandable> : ICommander
 where TCommandable : class, IDisposable
 {
+	public bool? AskForConfirmation { get; init; }
+	public string? CommandInputPrompt { get; set; }
+	public string? ConfirmationPrompt { get; set; }
+	public required List<Command<TCommandable>> Commands { get; init; }
+	public Dictionary<SystemCommandNameWithAliases, CommandOverride> SystemCommandsOverrides { get; set; }
+
 	private readonly TCommandable _commandable;
 
-	/// <summary>
-	/// Settings that define the behavior of the <see cref="ObjectCommander{TCommandable}"/>.
-	/// </summary>
-	private readonly CommanderSettings<TCommandable> _settings;
-
-	/// <summary>
-	/// Constructor of the <see cref="CommonCommander"/> instance.
-	/// </summary>
-	/// <param name="commandable">Commandable object over which the <see cref="ObjectCommander{TCommandable}"/> operates</param>
-	/// <param name="settings">Settings that provides the configuration</param>
-	public ObjectCommander(TCommandable commandable, CommanderSettings<TCommandable> settings)
+	///
+	/// <inheritdoc cref="ObjectCommander{TCommandable}" />
+	///
+	public ObjectCommander(TCommandable commandable)
 	{
 		this._commandable = commandable;
-		this._settings = settings;
 	}
 
 	///
@@ -35,26 +31,26 @@ where TCommandable : class, IDisposable
 	///
 	public ICommander RunSelf()
 	{
-		while(true)
-		{
-			var answer = new PredefinedAnswersQuestion
-			(
-				question: $"Enter command",
-				answers: this._settings.Commands.Keys.ToArray()
-			).Ask().Answer;
-
-			var confirm = true;
-			if(this._settings.AskForConfirmation is true)
-			{
-				confirm = new YesNoQuestion(question: $"Are you sure?").Ask().Is(answers => answers.Yes);
-			}
-
-			if(confirm)
-			{
-				_settings.Commands[answer].Invoke(_commandable);
-			}
-		}
-
+		// while(true)
+		// {
+		// 	var answer = new PredefinedAnswersQuestion
+		// 	(
+		// 		question: $"Enter command",
+		// 		answers: this._settings.Commands.Keys.ToArray()
+		// 	).Ask().Answer;
+		//
+		// 	var confirm = true;
+		// 	if(this._settings.AskForConfirmation is true)
+		// 	{
+		// 		confirm = new YesNoQuestion(question: $"Are you sure?").Ask().Is(answers => answers.Yes);
+		// 	}
+		//
+		// 	if(confirm)
+		// 	{
+		// 		_settings.Commands[answer].Invoke(_commandable);
+		// 	}
+		// }
+		//
 		return this;
 	}
 

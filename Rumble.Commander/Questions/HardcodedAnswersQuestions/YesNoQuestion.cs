@@ -1,4 +1,4 @@
-﻿using Rumble.Commander.Questions.HardcodedAnswersQuestions.Interfaces;
+﻿using System.Collections.Generic;
 using Rumble.Commander.Questions.PredefinedAnswersQuestions;
 
 namespace Rumble.Commander.Questions.HardcodedAnswersQuestions;
@@ -7,8 +7,11 @@ internal sealed class YesNoQuestion : IHardcodedAnswersQuestion<YesNoQuestion.Ye
 {
 	internal sealed class YesNoAnswersTable : ICheckTable
 	{
-		internal string[] Yes { get; } = { "yes", "y" };
-		internal string[] No  { get; } = { "no", "n" };
+		internal (string Name, string[] Aliases) Yes { get; } = ("yes", new [] { "y" });
+		internal (string Name, string[] Aliases) No  { get; } = ("no" , new [] { "n" });
+
+		internal IReadOnlyList<string> YesFlat => new List<string>(collection: Yes.Aliases) { Yes.Name }.AsReadOnly();
+		internal IReadOnlyList<string> NoFlat => new List<string>(collection: No.Aliases) { No.Name }.AsReadOnly();
 	}
 
 	private readonly PredefinedAnswersQuestion _rPredefinedAnswersQuestion;
@@ -18,8 +21,11 @@ internal sealed class YesNoQuestion : IHardcodedAnswersQuestion<YesNoQuestion.Ye
 		this._rPredefinedAnswersQuestion = new
 		(
 			question,
-			answerTable.Yes,
-			answerTable.No
+			answers: new List<IEnumerable<string>>()
+			{
+				answerTable.YesFlat,
+				answerTable.NoFlat
+			}
 		);
 	}
 
