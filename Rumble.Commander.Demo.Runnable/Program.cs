@@ -1,49 +1,64 @@
 ﻿using System;
 using Rumble.Commander;
 
-using var common = new CommonCommander()
+using var common = new CommonCommander(new ()
 {
-	MatchCase = false,
+	Reader = Console.In,
+	Writer = Console.Out
+})
+{
+	CommandInputPrompt = "Please, enter a command",
+	ConfirmationPrompt = "Should the command be executed?",
+
+	UseAliases = true,
+	MatchCase = true,
 	AskForConfirmation = true,
-	CommandInputPrompt = "Common Enter a command",
-	ConfirmationPrompt = "Common Are you sure?",
+
 	SystemCommandsOverrides = new ()
 	{
 		[SystemCommandNameWithAliases.Exit] = new ()
 		{
-			Name = "exitLALA",
-			Aliases = new () { "exLA" },
-			MatchCase = true,
+			Aliases = new () { "eo", "qo" },
+			ConfirmationPrompt = "Are you sure you want to exit?",
+
 			UseAliases = true,
-			AskForConfirmation = true,
-			ConfirmationPrompt = "Are you sure you want to exit?"
+			MatchCase = true,
+			AskForConfirmation = true
 		}
 	},
+
 	CustomCommands = new ()
 	{
 		new ()
 		{
-			Action = () => Console.WriteLine($"common1 (c1) executed"),
+			Action = () => Console.WriteLine($"common1 executed"),
 			Settings = new ()
 			{
 				Name = "common1",
 				Aliases = new () { "c1" },
-				AskForConfirmation = true,
-				ConfirmationPrompt = "Are you sure to execute common1?"
+				ConfirmationPrompt = "Are you sure to execute common1?",
+
+				UseAliases = true,
+				MatchCase = true,
+				AskForConfirmation = true
 			}
 		},
 		new ()
 		{
-			Action = () => Console.WriteLine($"common2 (c2) executed"),
+			Action = () => Console.WriteLine($"common2 has been executed"),
 			Settings = new ()
 			{
 				Name = "common2",
 				Aliases = new () { "c2" },
+				ConfirmationPrompt = "Are you sure to execute common2?",
+
+				UseAliases = true,
+				MatchCase = true,
 				AskForConfirmation = true
 			}
 		}
 	}
-}.RunSelf();
+}.Run();
 
 // using var over = new ObjectCommander<X>(commandable: new X())
 // {
@@ -83,10 +98,10 @@ using var common = new CommonCommander()
 // 	ConfirmationPrompt = "Total Вы уверены?"
 // }).Run;
 
-internal class X : IDisposable
-{
-	public void Dispose()
-	{
-
-	}
-}
+// internal class X : IDisposable
+// {
+// 	public void Dispose()
+// 	{
+//
+// 	}
+// }
