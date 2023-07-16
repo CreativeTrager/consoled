@@ -1,73 +1,85 @@
 ﻿using System;
 using Rumble.Commander;
 
-using var common = new CommonCommander(settings: new ()
+using var common = new CommonCommander()
 {
+	MatchCase = false,
 	AskForConfirmation = true,
-	CommandInputPrompt = "Common Введите команду",
-	ConfirmationPrompt = "Common Вы уверены?",
-	Commands =
+	CommandInputPrompt = "Common Enter a command",
+	ConfirmationPrompt = "Common Are you sure?",
+	SystemCommandsOverrides = new ()
 	{
-		new Command()
+		[SystemCommandNameWithAliases.Exit] = new ()
 		{
-			Name = "common1",
-			Aliases = new [] { "c1" },
-			AskForConfirmation = false,
-			Action = () =>
+			Name = "exitLALA",
+			Aliases = new () { "exLA" },
+			MatchCase = true,
+			UseAliases = true,
+			AskForConfirmation = true
+		}
+	},
+	CustomCommands = new ()
+	{
+		new ()
+		{
+			Action = () => Console.WriteLine($"common1 (c1) executed"),
+			Settings = new ()
 			{
-
+				Name = "common1",
+				Aliases = new () { "c1" },
+				AskForConfirmation = true
 			}
 		},
-		new Command()
+		new ()
 		{
-			Name = "common2",
-			Aliases = new [] { "c2" },
-			AskForConfirmation = true,
-			Action = () =>
+			Action = () => Console.WriteLine($"common2 (c2) executed"),
+			Settings = new ()
 			{
-
+				Name = "common2",
+				Aliases = new () { "c2" },
+				AskForConfirmation = true
 			}
 		}
 	}
-});
+}.RunSelf();
 
-using var over = new ObjectCommander<X>(commandable: new X(), settings: new ()
+using var over = new ObjectCommander<X>(commandable: new X())
 {
 	AskForConfirmation = true,
-	CommandInputPrompt = "Object Введите команду",
-	ConfirmationPrompt = "Object Вы уверены?",
+	CommandInputPrompt = "Object Enter a command",
+	ConfirmationPrompt = "Object Are you sure?",
 	Commands = new ()
 	{
-		new Command()
+		new ()
 		{
-			Name = "over1",
-			Aliases = new [] { "01" },
-			AskForConfirmation = false,
-			Action = () =>
+			Action = commandable => { },
+			Settings = new ()
 			{
-
+				Name = "over1",
+				Aliases = new () { "o1" },
+				AskForConfirmation = true
 			}
 		},
-		new Command()
+		new ()
 		{
-			Name = "over2",
-			Aliases = new [] { "o2" },
-			AskForConfirmation = true,
-			Action = () =>
+			Action = commandable => { },
+			Settings = new ()
 			{
-
+				Name = "over2",
+				Aliases = new () { "o2" },
+				AskForConfirmation = true
 			}
 		}
 	}
-});
+};
 
-// using var totalCommander = TotalCommander.Factory.Over(new [] { common, over }, options: new () {}).Run;
-using var totalCommander = TotalCommander.Factory.Over(common, over, options: new ()
-{
-	AskForConfirmation = true,
-	CommandInputPrompt = "Total Введите команду",
-	ConfirmationPrompt = "Total Вы уверены?"
-}).Run;
+// // using var totalCommander = TotalCommander.Factory.Over(new [] { common, over }, options: new () {}).Run;
+// using var totalCommander = TotalCommander.Factory.Over(common, over, options: new ()
+// {
+// 	AskForConfirmation = true,
+// 	CommandInputPrompt = "Total Введите команду",
+// 	ConfirmationPrompt = "Total Вы уверены?"
+// }).Run;
 
 internal class X : IDisposable
 {
