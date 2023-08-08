@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Rumble.Commander.Commands;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Commanders;
 
 ///
 /// <inheritdoc />

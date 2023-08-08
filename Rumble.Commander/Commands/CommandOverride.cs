@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Commands;
 
 /// <summary>
 /// Settings overrides for <see cref="ICommand"/>.

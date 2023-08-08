@@ -1,6 +1,7 @@
 ﻿using System;
+using Rumble.Commander.Commanders;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Commands;
 
 /// <summary>
 /// Entity that is used by <see cref="ICommander"/>.

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Rumble.Commander.Commanders;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Commands;
 
 /// <summary>
 /// Settings of the <see cref="ICommand"/>.
@@ -63,6 +64,6 @@ public sealed class CommandSettings
 	///
 	public CommandSettings()
 	{
-		this.Aliases = new List<string>();
+		this.Aliases = new ();
 	}
 }

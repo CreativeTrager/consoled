@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Commands;
 
 ///
 /// <inheritdoc />

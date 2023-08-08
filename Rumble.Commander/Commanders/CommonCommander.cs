@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Rumble.Commander.Commands;
 using Rumble.Commander.Questions;
 using Rumble.Essentials;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Commanders;
 
 ///
 /// <inheritdoc />
 ///
 public sealed class CommonCommander : ICommander
 {
-	private readonly CommanderSettings _settings;
 	/// <summary>
 	/// Default command input prompt.
 	/// </summary>
@@ -23,7 +23,10 @@ public sealed class CommonCommander : ICommander
 	/// </summary>
 	private const string _defaultCommandConfirmationPrompt = "Are you sure?";
 
-	private bool _exitIsNotRequested;
+	///
+	/// <inheritdoc cref="CommanderSettings" />
+	///
+	private readonly CommanderSettings _settings;
 
 	/// <summary>
 	/// Flag that indicates whether the aliases of the command should be used.
@@ -57,6 +60,12 @@ public sealed class CommonCommander : ICommander
 	private readonly List<Command> _customCommands;
 
 	private readonly Dictionary<SystemCommandNameWithAliases, CommandOverride> _systemCommandsOverrides;
+
+	/// <summary>
+	/// Flag that indicates whether the commander should not be terminated.
+	/// </summary>
+	/// <remarks><c>True</c> by default</remarks>
+	private bool _terminationIsNotRequested;
 
 	/// <summary>
 	/// Overrides for system commands.
@@ -216,7 +225,7 @@ public sealed class CommonCommander : ICommander
 	public CommonCommander(CommanderSettings settings)
 	{
 		this._settings = settings;
-		this._exitIsNotRequested = true;
+		this._terminationIsNotRequested = true;
 
 		this._matchCase = true;
 		this._useAliases = true;
@@ -231,7 +240,7 @@ public sealed class CommonCommander : ICommander
 		{
 			new ()
 			{
-				Action = () => this._exitIsNotRequested = false,
+				Action = () => this._terminationIsNotRequested = false,
 				Settings = new ()
 				{
 					Name = SystemCommandNameWithAliases.Exit.Name,
@@ -287,7 +296,7 @@ public sealed class CommonCommander : ICommander
 				? command.Settings.Aliases : ArraySegment<string>.Empty
 		})).ToList();
 
-		while(this._exitIsNotRequested)
+		while(this._terminationIsNotRequested)
 		{
 			var commandName = new Question
 			(
@@ -342,6 +351,9 @@ public sealed class CommonCommander : ICommander
 	}
 }
 
+/// <summary>
+/// Settings of the <see cref="ICommander" />.
+/// </summary>
 public sealed class CommanderSettings
 {
 	public TextReader Reader { get; init; }

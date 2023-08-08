@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Rumble.Commander.Commanders;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Commands;
 
 /// <summary>
 /// Name and aliases of a system command used by <see cref="ICommander"/>.
