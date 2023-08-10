@@ -1,27 +1,30 @@
 ﻿using System;
-using Rumble.Commander;
 using Rumble.Commander.Commanders;
 using Rumble.Commander.Commands;
 
-using var common = new CommonCommander(new ()
-{
-	Reader = Console.In,
-	Writer = Console.Out
-})
-{
-	CommandInputPrompt = "Please, enter a command",
-	ConfirmationPrompt = "Should the command be executed?",
+// using var commonCommander = new ObjectCommander<TextReader>(File.OpenText("test.txt"))
 
-	UseAliases = true,
-	MatchCase = true,
-	AskForConfirmation = true,
+using var commonCommander = new CommonCommander()
+{
+	Settings = new ()
+	{
+		Reader = Console.In,
+		Writer = Console.Out,
+
+		InputPrompt = "Please, enter a command",
+		ConfirmationPrompt = "Should the command be executed?",
+
+		UseAliases = true,
+		MatchCase = true,
+		AskForConfirmation = true
+	},
 
 	SystemCommandsOverrides = new ()
 	{
-		[SystemCommandNameWithAliases.Exit] = new ()
+		[SystemCommandNames.Quit] = new ()
 		{
 			Aliases = new () { "eo", "qo" },
-			ConfirmationPrompt = "Are you sure you want to exit?",
+			ConfirmationPrompt = "Are you sure you want to quit?",
 
 			UseAliases = true,
 			MatchCase = true,
@@ -54,56 +57,10 @@ using var common = new CommonCommander(new ()
 				Aliases = new () { "c2" },
 				ConfirmationPrompt = "Are you sure to execute common2?",
 
-				UseAliases = true,
-				MatchCase = true,
+				UseAliases = false,
+				MatchCase = false,
 				AskForConfirmation = true
 			}
 		}
 	}
 }.Run();
-
-// using var over = new ObjectCommander<X>(commandable: new X())
-// {
-// 	AskForConfirmation = true,
-// 	CommandInputPrompt = "Object Enter a command",
-// 	ConfirmationPrompt = "Object Are you sure?",
-// 	Commands = new ()
-// 	{
-// 		new ()
-// 		{
-// 			Action = commandable => { },
-// 			Settings = new ()
-// 			{
-// 				Name = "over1",
-// 				Aliases = new () { "o1" },
-// 				AskForConfirmation = true
-// 			}
-// 		},
-// 		new ()
-// 		{
-// 			Action = commandable => { },
-// 			Settings = new ()
-// 			{
-// 				Name = "over2",
-// 				Aliases = new () { "o2" },
-// 				AskForConfirmation = true
-// 			}
-// 		}
-// 	}
-// };
-
-// // using var totalCommander = TotalCommander.Factory.Over(new [] { common, over }, options: new () {}).Run;
-// using var totalCommander = TotalCommander.Factory.Over(common, over, options: new ()
-// {
-// 	AskForConfirmation = true,
-// 	CommandInputPrompt = "Total Введите команду",
-// 	ConfirmationPrompt = "Total Вы уверены?"
-// }).Run;
-
-// internal class X : IDisposable
-// {
-// 	public void Dispose()
-// 	{
-//
-// 	}
-// }
