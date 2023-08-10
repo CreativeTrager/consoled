@@ -7,7 +7,7 @@ namespace Rumble.Commander.Commands;
 /// <summary>
 /// Name and aliases of a system command used by <see cref="ICommander"/>.
 /// </summary>
-public sealed class SystemCommandNameWithAliases
+public sealed class SystemCommandNames
 {
 	/// <summary>
 	/// Name of the system command.
@@ -20,11 +20,11 @@ public sealed class SystemCommandNameWithAliases
 	private readonly List<string> _aliases;
 
 	///
-	/// <inheritdoc cref="SystemCommandNameWithAliases"/>
+	/// <inheritdoc cref="SystemCommandNames"/>
 	///
 	/// <param name="name">Name of the system command</param>
 	/// <param name="aliases">Aliases of the system command</param>
-	private SystemCommandNameWithAliases(string name, List<string> aliases)
+	private SystemCommandNames(string name, List<string> aliases)
 	{
 		this._name = name;
 		this._aliases = aliases;
@@ -38,7 +38,7 @@ public sealed class SystemCommandNameWithAliases
 	///
 	/// <inheritdoc cref="_aliases"/>
 	///
-	public List<string> Aliases => this._aliases.ToList();
+	public IReadOnlyCollection<string> Aliases => this._aliases.ToList();
 
 	///
 	/// <inheritdoc cref="object.ToString"/>
@@ -50,12 +50,12 @@ public sealed class SystemCommandNameWithAliases
 	}
 
 	/// <summary>
-	/// Exit system command used to break out from the <see cref="ICommander"/>'s run loop.
+	/// Names of the system command used to break out from the <see cref="ICommander"/>'s run loop.
 	/// </summary>
-	public static SystemCommandNameWithAliases Exit => new (name: "exit", aliases: new () { "quit", "q" });
+	public static SystemCommandNames Quit => new (name: "quit", aliases: new () { "exit", "q" });
 
 	/// <summary>
-	/// Help system command used to show information about available commands for particular <see cref="ICommander"/>.
+	/// Names of the system command used to show information about available commands for particular <see cref="ICommander"/>.
 	/// </summary>
-	public static SystemCommandNameWithAliases Help => new (name: "help", aliases: new () { "about", "h" });
+	public static SystemCommandNames Help => new (name: "help", aliases: new () { "about", "h" });
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Rumble.Commander.Commanders;
 
 namespace Rumble.Commander.Commands;
@@ -57,7 +58,13 @@ public sealed class CommandSettings
 	/// <summary>
 	/// <see cref="Name"/> with <see cref="Aliases"/> represented in one collection.
 	/// </summary>
-	public IReadOnlyCollection<string> NameWithAliases => new List<string>() { Name, Aliases }.AsReadOnly();
+	public IReadOnlyCollection<string> AvailableNames => new List<string>()
+	{
+		this.Name,
+		this.UseAliases ?? false
+			? this.Aliases : ArraySegment<string>.Empty
+
+	}.AsReadOnly();
 
 	///
 	/// <inheritdoc cref="Command" />

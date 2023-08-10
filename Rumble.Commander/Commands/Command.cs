@@ -22,7 +22,7 @@ public sealed class Command : ICommand
 	///
 	public Command()
 	{
-		// Empty
+		// Empty.
 	}
 }
 
@@ -46,6 +46,6 @@ public sealed class Command<TCommandable> : ICommand<TCommandable>
 	///
 	public Command()
 	{
-		// Empty
+		// Empty.
 	}
 }

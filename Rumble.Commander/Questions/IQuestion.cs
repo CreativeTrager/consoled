@@ -13,7 +13,10 @@ internal interface IQuestion
 
 internal interface IQuestionResult
 {
+	bool IsCorrect { get; init; }
 	string Answer { get; init; }
+
+	bool IsIncorrect => IsCorrect is false;
 }
 
 
@@ -35,7 +38,7 @@ where TCheckTable : ICheckTable
 internal interface ICheckableResult<TCheckTable>
 where TCheckTable : ICheckTable
 {
-	bool Is(Expression<Func<TCheckTable, IReadOnlyCollection<string>>> check);
+	bool Is(Expression<Func<TCheckTable, IEnumerable<string>>> check);
 }
 
 internal interface ICheckTable

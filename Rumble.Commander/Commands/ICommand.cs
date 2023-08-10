@@ -4,35 +4,25 @@ using Rumble.Commander.Commanders;
 namespace Rumble.Commander.Commands;
 
 /// <summary>
-/// Entity that is used by <see cref="ICommander"/>.
+/// Abstraction that is used by <see cref="ICommander"/> to execute specific action.
 /// </summary>
-public interface ICommand
+public interface ICommand : ICommandSettingsContainer
 {
 	/// <summary>
-	/// Action that is executed when the command invoked.
+	/// Action that is executed when the command is invoked.
 	/// </summary>
 	Action Action { get; init; }
-
-	/// <summary>
-	/// Settings of the command.
-	/// </summary>
-	CommandSettings Settings { get; init; }
 }
 
 ///
 /// <inheritdoc cref="ICommand"/>
 ///
-/// <typeparam name="TCommandable">Type of a commandable object the command operates on</typeparam>
-public interface ICommand<TCommandable>
+/// <typeparam name="TCommandable">Type of a commandable object the command operates on.</typeparam>
+public interface ICommand<TCommandable> : ICommandSettingsContainer
 {
 	///
 	/// <inheritdoc cref="ICommand.Action"/>
 	///
-	/// <typeparam name="TCommandable">Type of a commandable object the command operates on</typeparam>
+	/// <typeparam name="TCommandable">Type of a commandable object the command operates on.</typeparam>
 	Action<TCommandable> Action { get; init; }
-
-	///
-	/// <inheritdoc cref="ICommand.Settings"/>
-	///
-	CommandSettings Settings { get; init;}
 }

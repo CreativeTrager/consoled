@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Rumble.Commander.Commands;
 
 namespace Rumble.Commander.Commanders;
@@ -8,58 +9,85 @@ namespace Rumble.Commander.Commanders;
 /// <inheritdoc />
 ///
 /// <typeparam name="TCommandable">Type of a commandable object over which an <see cref="ObjectCommander{TCommandable}"/> operates</typeparam>
-public sealed class ObjectCommander<TCommandable> : ICommander
-where TCommandable : class, IDisposable
+public sealed class ObjectCommander<TCommandable> : Commander
 {
-	public bool? AskForConfirmation { get; init; }
-	public string? CommandInputPrompt { get; set; }
-	public string? ConfirmationPrompt { get; set; }
-	public required List<Command<TCommandable>> Commands { get; init; }
-	public Dictionary<SystemCommandNameWithAliases, CommandOverride> SystemCommandsOverrides { get; set; }
-
+	/// <summary>
+	/// Commandable object over which an <see cref="ObjectCommander{TCommandable}"/> operates.
+	/// </summary>
 	private readonly TCommandable _commandable;
+
+	/// <summary>
+	/// Custom (user-defined) commands.
+	/// </summary>
+	private readonly List<Command<TCommandable>> _customCommands;
+
+	/// <summary>
+	///  Dictionary representation of the <see cref="_customCommands"/> linked to their names.
+	/// </summary>
+	private readonly Dictionary<string, Command<TCommandable>> _customCommandsDictionary;
+
+
+
+	///
+	/// <inheritdoc cref="_customCommands"/>
+	///
+	public required List<Command<TCommandable>> CustomCommands
+	{
+		init
+		{
+			// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+			if(value is null)
+			{
+				return;
+			}
+
+			this._customCommands = value;
+			this._customCommandsDictionary = this._customCommands.ToDictionary
+			(
+				keySelector: command => command.Settings.Name,
+				elementSelector: command => command
+			);
+		}
+	}
+
+	///
+	/// <inheritdoc />
+	///
+	protected override IReadOnlyCollection<ICommandSettingsContainer> CustomCommandsSettings
+	{
+		get => this._customCommands.Cast<ICommandSettingsContainer>().ToList();
+	}
+
+
 
 	///
 	/// <inheritdoc cref="ObjectCommander{TCommandable}" />
 	///
 	public ObjectCommander(TCommandable commandable)
 	{
+		this._customCommands = new ();
+		this._customCommandsDictionary = new ();
 		this._commandable = commandable;
 	}
 
+
+
 	///
 	/// <inheritdoc />
 	///
-	public ICommander Run()
+	protected override void ExecuteCustomCommandByName(string name)
 	{
-		// while(true)
-		// {
-		// 	var answer = new PredefinedAnswersQuestion
-		// 	(
-		// 		question: $"Enter command",
-		// 		answers: this._settings.Commands.Keys.ToArray()
-		// 	).Ask().Answer;
-		//
-		// 	var confirm = true;
-		// 	if(this._settings.AskForConfirmation is true)
-		// 	{
-		// 		confirm = new YesNoQuestion(question: $"Are you sure?").Ask().Is(answers => answers.Yes);
-		// 	}
-		//
-		// 	if(confirm)
-		// 	{
-		// 		_settings.Commands[answer].Invoke(_commandable);
-		// 	}
-		// }
-		//
-		return this;
+		this._customCommandsDictionary[name].Action.Invoke(this._commandable);
 	}
 
 	///
 	/// <inheritdoc />
 	///
-	public void Dispose()
+	public override void Dispose()
 	{
-		this._commandable.Dispose();
+		if(this._commandable is IDisposable disposable)
+		{
+			disposable.Dispose();
+		}
 	}
 }
