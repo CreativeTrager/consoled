@@ -210,8 +210,8 @@ public abstract class Commander : ICommander
 		var questionCorrectAnswers = commandsWithNames.SelectMany(command => command.Names).ToList();
 		var questionSettings = new QuestionSettings()
 		{
-			Reader = this._settings.Reader,
 			Writer = this._settings.Writer,
+			Reader = this._settings.Reader,
 			MatchCase = false
 		};
 

@@ -8,8 +8,8 @@ using var commonCommander = new CommonCommander()
 {
 	Settings = new ()
 	{
-		Reader = Console.In,
 		Writer = Console.Out,
+		Reader = Console.In,
 
 		InputPrompt = "Please, enter a command",
 		ConfirmationPrompt = "Should the command be executed?",

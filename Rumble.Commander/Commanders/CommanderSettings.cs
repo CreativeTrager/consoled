@@ -25,14 +25,14 @@ public sealed record class CommanderSettings
 	private const string _defaultUnknownInputHintTemplate = "Unknown command. Type \"{0}\" for help.";
 
 	/// <summary>
-	/// Reader of the commands.
-	/// </summary>
-	private readonly TextReader _reader;
-
-	/// <summary>
 	/// Writer of the replies.
 	/// </summary>
 	private readonly TextWriter _writer;
+
+	/// <summary>
+	/// Reader of the commands.
+	/// </summary>
+	private readonly TextReader _reader;
 
 	/// <summary>
 	/// Flag that indicates whether the aliases of the command should be used.
@@ -68,21 +68,21 @@ public sealed record class CommanderSettings
 	private readonly string _unknownInputHint;
 
 	///
-	/// <inheritdoc cref="_reader"/>
-	///
-	public TextReader Reader
-	{
-		get => this._reader;
-		init => this._reader = value;
-	}
-
-	///
 	/// <inheritdoc cref="_writer"/>
 	///
 	public TextWriter Writer
 	{
 		get => this._writer;
 		init => this._writer = value;
+	}
+
+	///
+	/// <inheritdoc cref="_reader"/>
+	///
+	public TextReader Reader
+	{
+		get => this._reader;
+		init => this._reader = value;
 	}
 
 	///
@@ -156,8 +156,8 @@ public sealed record class CommanderSettings
 	///
 	public CommanderSettings()
 	{
-		this._reader = Console.In;
 		this._writer = Console.Out;
+		this._reader = Console.In;
 
 		this._useAliases = true;
 		this._matchCase = true;
