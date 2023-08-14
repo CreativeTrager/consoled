@@ -1,10 +1,9 @@
 ﻿using System;
+using System.IO;
 using Rumble.Commander.Commanders;
 using Rumble.Commander.Commands;
 
-// using var commonCommander = new ObjectCommander<TextReader>(File.OpenText("test.txt"))
-
-using var commonCommander = new CommonCommander()
+using var commonCommander = new ObjectCommander<StreamReader>(File.OpenText("test.txt"))
 {
 	Settings = new ()
 	{
@@ -21,9 +20,9 @@ using var commonCommander = new CommonCommander()
 
 	SystemCommandsOverrides = new ()
 	{
-		[SystemCommandNames.Quit] = new ()
+		[Command.System.Name.Quit] = new ()
 		{
-			Aliases = new () { "eo", "qo" },
+			Aliases = new () { "qq" },
 			ConfirmationPrompt = "Are you sure you want to quit?",
 
 			UseAliases = true,
@@ -36,11 +35,14 @@ using var commonCommander = new CommonCommander()
 	{
 		new ()
 		{
-			Action = () => Console.WriteLine($"common1 executed"),
+			Action = reader =>
+			{
+				Console.WriteLine(reader.ReadLine());
+			},
 			Settings = new ()
 			{
-				Name = "common1",
-				Aliases = new () { "c1" },
+				Name = "read-line",
+				Aliases = new () { "rl" },
 				ConfirmationPrompt = "Are you sure to execute common1?",
 
 				UseAliases = true,
@@ -50,13 +52,29 @@ using var commonCommander = new CommonCommander()
 		},
 		new ()
 		{
-			Action = () => Console.WriteLine($"common2 has been executed"),
+			Action = reader =>
+			{
+				Console.WriteLine(reader.ReadToEnd());
+			},
 			Settings = new ()
 			{
-				Name = "common2",
-				Aliases = new () { "c2" },
-				ConfirmationPrompt = "Are you sure to execute common2?",
-
+				Name = "read-to-end",
+				Aliases = new () { "rte" },
+				UseAliases = false,
+				MatchCase = false,
+				AskForConfirmation = true
+			}
+		},
+		new ()
+		{
+			Action = reader =>
+			{
+				reader.BaseStream.Seek(0, SeekOrigin.Begin);
+				reader.DiscardBufferedData();
+			},
+			Settings = new ()
+			{
+				Name = "reset",
 				UseAliases = false,
 				MatchCase = false,
 				AskForConfirmation = true
