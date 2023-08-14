@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Rumble.Commander;
+namespace Rumble.Commander.Extensions;
 
 /// <summary>
 /// Extensions for <see cref="List{T}"/>.

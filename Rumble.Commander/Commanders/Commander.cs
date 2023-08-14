@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Rumble.Commander.Commands;
+using Rumble.Commander.Extensions;
 using Rumble.Commander.Questions;
 using Rumble.Essentials;
 
@@ -30,7 +31,7 @@ public abstract class Commander : ICommander
 	/// <summary>
 	/// Overrides for system commands.
 	/// </summary>
-	private readonly Dictionary<SystemCommandNames, CommandOverride> _systemCommandsOverrides;
+	private readonly Dictionary<Command.System.Name, CommandOverride> _systemCommandsOverrides;
 
 	/// <summary>
 	/// Flag that indicates whether the commander should not be terminated.
@@ -57,7 +58,7 @@ public abstract class Commander : ICommander
 	/// <inheritdoc cref="_systemCommandsOverrides"/>
 	///
 	/// <exception cref="ApplicationException">Thrown, if any override is null or not valid.</exception>
-	public Dictionary<SystemCommandNames, CommandOverride> SystemCommandsOverrides
+	public Dictionary<Command.System.Name, CommandOverride> SystemCommandsOverrides
 	{
 		init
 		{
@@ -69,7 +70,7 @@ public abstract class Commander : ICommander
 
 			foreach(var (key, commandOverride) in this._systemCommandsOverrides)
 			{
-				if(this._systemCommands.SingleOrDefault(command => command.Settings.Name.Equals(key.Name)) is not { } commandToOverride)
+				if(this._systemCommands.SingleOrDefault(command => command.Settings.Name.Equals(key)) is not { } commandToOverride)
 				{
 					throw new ApplicationException
 					(
@@ -147,50 +148,31 @@ public abstract class Commander : ICommander
 		this._systemCommandsOverrides = new ();
 		this._systemCommands = new ()
 		{
-			// Quit command.
-			new ()
+			Command.System.Quit(() => this._terminationIsNotRequested = false),
+			Command.System.Help(() =>
 			{
-				Action = () => this._terminationIsNotRequested = false,
-				Settings = new ()
-				{
-					Name = SystemCommandNames.Quit.Name,
-					Aliases = SystemCommandNames.Quit.Aliases.ToList()
-				}
-			},
-			// Help command.
-			new ()
-			{
-				Action = () =>
-				{
-					this._settings.Writer.WriteLine
-					(
-						$"{Environment.NewLine}" +
-						$"Help page{Environment.NewLine}" +
-						$"System commands{Environment.NewLine}" +
-						$"\t• {
+				this._settings.Writer.WriteLine
+				(
+					$"{Environment.NewLine}" +
+					$"Help page{Environment.NewLine}" +
+					$"System commands{Environment.NewLine}" +
+					$"\t• {
 
-							this._systemCommands!
-								.Select(command => command.AvailableNamesUsingFallback(() => this._settings.UseAliases).Joined(separator: "/"))
-								.Joined(separator: $"{Environment.NewLine}\t• ")
+						this._systemCommands!
+							.Select(command => command.AvailableNamesUsingFallback(() => this._settings.UseAliases).Joined(separator: "/"))
+							.Joined(separator: $"{Environment.NewLine}\t• ")
 
-						}{Environment.NewLine}" +
-						$"Custom commands{Environment.NewLine}" +
-						$"\t• {
+					}{Environment.NewLine}" +
+					$"Custom commands{Environment.NewLine}" +
+					$"\t• {
 
-							this.CustomCommandsSettings
-								.Select(command => command.AvailableNamesUsingFallback(() => this._settings.UseAliases).Joined(separator: "/"))
-								.Joined(separator: $"{Environment.NewLine}\t• ")
+						this.CustomCommandsSettings
+							.Select(command => command.AvailableNamesUsingFallback(() => this._settings.UseAliases).Joined(separator: "/"))
+							.Joined(separator: $"{Environment.NewLine}\t• ")
 
-						}{Environment.NewLine}"
-					);
-				},
-				Settings = new ()
-				{
-					Name = SystemCommandNames.Help.Name,
-					Aliases = SystemCommandNames.Help.Aliases.ToList(),
-					AskForConfirmation = false
-				}
-			}
+					}{Environment.NewLine}"
+				);
+			})
 		};
 
 		this._systemCommandsDictionary = this._systemCommands.ToDictionary

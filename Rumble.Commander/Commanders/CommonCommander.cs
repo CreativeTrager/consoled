@@ -19,6 +19,15 @@ public sealed class CommonCommander : Commander
 	/// </summary>
 	private readonly Dictionary<string, Command> _customCommandsDictionary;
 
+	///
+	/// <inheritdoc cref="CommonCommander" />
+	///
+	public CommonCommander() : base()
+	{
+		this._customCommands = new ();
+		this._customCommandsDictionary = new ();
+	}
+
 
 
 	///
@@ -50,19 +59,6 @@ public sealed class CommonCommander : Commander
 	{
 		get => this._customCommands.Cast<ICommandSettingsContainer>().ToList();
 	}
-
-
-
-	///
-	/// <inheritdoc cref="CommonCommander" />
-	///
-	public CommonCommander() : base()
-	{
-		this._customCommands = new ();
-		this._customCommandsDictionary = new ();
-	}
-
-
 
 	///
 	/// <inheritdoc />

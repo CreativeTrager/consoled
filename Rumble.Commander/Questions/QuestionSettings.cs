@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Rumble.Commander.Questions;
 
-internal class QuestionSettings
+internal sealed record class QuestionSettings
 {
 	internal required TextReader Reader { get; init; }
 	internal required TextWriter Writer { get; init; }

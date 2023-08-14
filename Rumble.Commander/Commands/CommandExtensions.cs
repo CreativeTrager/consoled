@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Rumble.Commander.Extensions;
 
 namespace Rumble.Commander.Commands;
 
 /// <summary>
 /// Extensions for <see cref="ICommand"/>.
 /// </summary>
-public static class CommandExtensions
+internal static class CommandExtensions
 {
 	/// <summary>
 	/// Name with or without aliases of the <see cref="ICommand"/>
@@ -20,7 +21,7 @@ public static class CommandExtensions
 	/// </param>
 	/// <returns>Name with or without aliases of the <see cref="ICommand"/>.</returns>
 	/// <remarks>The extension makes it possible to add fallback validation for using aliases or not in addition to the internal one.</remarks>
-	public static IReadOnlyCollection<string> AvailableNamesUsingFallback(this ICommandSettingsContainer source, Func<bool>? useAliases)
+	internal static IReadOnlyCollection<string> AvailableNamesUsingFallback(this ICommandSettingsContainer source, Func<bool>? useAliases)
 	{
 		return new List<string>()
 		{

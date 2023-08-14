@@ -26,6 +26,16 @@ public sealed class ObjectCommander<TCommandable> : Commander
 	/// </summary>
 	private readonly Dictionary<string, Command<TCommandable>> _customCommandsDictionary;
 
+	///
+	/// <inheritdoc cref="ObjectCommander{TCommandable}" />
+	///
+	public ObjectCommander(TCommandable commandable) : base()
+	{
+		this._customCommands = new ();
+		this._customCommandsDictionary = new ();
+		this._commandable = commandable;
+	}
+
 
 
 	///
@@ -57,20 +67,6 @@ public sealed class ObjectCommander<TCommandable> : Commander
 	{
 		get => this._customCommands.Cast<ICommandSettingsContainer>().ToList();
 	}
-
-
-
-	///
-	/// <inheritdoc cref="ObjectCommander{TCommandable}" />
-	///
-	public ObjectCommander(TCommandable commandable)
-	{
-		this._customCommands = new ();
-		this._customCommandsDictionary = new ();
-		this._commandable = commandable;
-	}
-
-
 
 	///
 	/// <inheritdoc />

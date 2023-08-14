@@ -5,7 +5,7 @@ namespace Rumble.Commander.Commands;
 ///
 /// <inheritdoc />
 ///
-public sealed class Command : ICommand
+public sealed partial class Command : ICommand
 {
 	///
 	/// <inheritdoc />

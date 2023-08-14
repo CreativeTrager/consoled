@@ -7,7 +7,7 @@ namespace Rumble.Commander.Commanders;
 /// <summary>
 /// Settings of the <see cref="ICommander"/>.
 /// </summary>
-public sealed class CommanderSettings
+public sealed record class CommanderSettings
 {
 	/// <summary>
 	/// Default input prompt.
@@ -22,7 +22,7 @@ public sealed class CommanderSettings
 	/// <summary>
 	/// Default unknown input prompt.
 	/// </summary>
-	private const string _defaultUnknownInputHint = "Unknown command. Type \"{0}\" for help.";
+	private const string _defaultUnknownInputHintTemplate = "Unknown command. Type \"{0}\" for help.";
 
 	/// <summary>
 	/// Reader of the commands.
@@ -161,14 +161,14 @@ public sealed class CommanderSettings
 
 		this._useAliases = true;
 		this._matchCase = true;
-		this._askForConfirmation = true;
+		this._askForConfirmation = false;
 
 		this._inputPrompt = CommanderSettings._defaultInputPrompt;
 		this._confirmationPrompt = CommanderSettings._defaultConfirmationPrompt;
 		this._unknownInputHint = string.Format
 		(
-			CommanderSettings._defaultUnknownInputHint,
-			SystemCommandNames.Help.Name
+			CommanderSettings._defaultUnknownInputHintTemplate,
+			Command.System.Name.Help
 		);
 	}
 }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rumble.Commander.Commanders;
+using Rumble.Commander.Extensions;
 
 namespace Rumble.Commander.Commands;
 
 /// <summary>
 /// Settings of the <see cref="ICommand"/>.
 /// </summary>
-public sealed class CommandSettings
+public sealed record class CommandSettings
 {
 	/// <summary>
 	/// Name of the command.
@@ -55,6 +56,14 @@ public sealed class CommandSettings
 	/// </remarks>
 	public bool? MatchCase { get; set; }
 
+	///
+	/// <inheritdoc cref="Command" />
+	///
+	public CommandSettings()
+	{
+		this.Aliases = new ();
+	}
+
 	/// <summary>
 	/// <see cref="Name"/> with <see cref="Aliases"/> represented in one collection.
 	/// </summary>
@@ -65,12 +74,4 @@ public sealed class CommandSettings
 			? this.Aliases : ArraySegment<string>.Empty
 
 	}.AsReadOnly();
-
-	///
-	/// <inheritdoc cref="Command" />
-	///
-	public CommandSettings()
-	{
-		this.Aliases = new ();
-	}
 }
