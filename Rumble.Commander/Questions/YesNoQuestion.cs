@@ -15,7 +15,12 @@ internal sealed class YesNoQuestion : Question, IQuestion<YesNoQuestion.YesNoAns
 		internal IEnumerable<string> AllFlat => new List<string>() { YesFlat, NoFlat };
 	}
 
-	internal YesNoQuestion(string prompt, QuestionSettings settings) : base(prompt, correctAnswers: new YesNoAnswersTable().AllFlat, settings)
+	internal YesNoQuestion(string prompt, QuestionSettings settings) : base
+	(
+		prompt,
+		correctAnswers: new YesNoAnswersTable().AllFlat,
+		settings
+	)
 	{
 		// Empty.
 	}

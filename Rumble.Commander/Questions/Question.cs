@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace Rumble.Commander.Questions;
 
@@ -45,30 +44,5 @@ internal class Question : IQuestion
 					: StringComparer.CurrentCultureIgnoreCase
 			)
 		};
-	}
-}
-
-internal class QuestionResult : IQuestionResult
-{
-	public string Answer { get; init; }
-	public bool IsCorrect { get; init; }
-
-	public QuestionResult()
-	{
-		this.Answer = string.Empty;
-	}
-}
-
-internal sealed class QuestionResult<TCheckTable> : QuestionResult, IQuestionResult<TCheckTable>
-where TCheckTable : ICheckTable, new()
-{
-	public QuestionResult()
-	{
-		// Empty.
-	}
-
-	public bool Is(Expression<Func<TCheckTable, IEnumerable<string>>> check)
-	{
-		return check.Compile().Invoke(new ()).Contains(Answer);
 	}
 }
