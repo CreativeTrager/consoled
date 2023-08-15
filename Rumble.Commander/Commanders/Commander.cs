@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Rumble.Commander.Commands;
 using Rumble.Commander.Extensions;
@@ -44,7 +45,7 @@ public abstract class Commander : ICommander
 	///
 	/// <inheritdoc cref="_settings"/>
 	///
-	public required CommanderSettings Settings
+	public CommanderSettings Settings
 	{
 		init
 		{

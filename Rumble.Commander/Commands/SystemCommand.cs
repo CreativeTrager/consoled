@@ -23,7 +23,8 @@ public partial class Command
 			Settings = new ()
 			{
 				Name = System.Name.Quit.ToString(),
-				Aliases = new () { "exit", "q" }
+				Aliases = new () { "exit", "q" },
+				AskForConfirmation = true
 			}
 		};
 

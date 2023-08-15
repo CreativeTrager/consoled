@@ -12,7 +12,7 @@ public sealed record class CommanderSettings
 	/// <summary>
 	/// Default input prompt.
 	/// </summary>
-	private const string _defaultInputPrompt = "Enter command";
+	private const string _defaultInputPrompt = "Enter the command";
 
 	/// <summary>
 	/// Default confirmation prompt.
