@@ -68,6 +68,27 @@ public sealed record class CommanderSettings
 	private readonly string _unknownInputHint;
 
 	///
+	/// <inheritdoc cref="CommanderSettings"/>
+	///
+	public CommanderSettings()
+	{
+		this._writer = Console.Out;
+		this._reader = Console.In;
+
+		this._useAliases = true;
+		this._matchCase = true;
+		this._askForConfirmation = false;
+
+		this._inputPrompt = CommanderSettings._defaultInputPrompt;
+		this._confirmationPrompt = CommanderSettings._defaultConfirmationPrompt;
+		this._unknownInputHint = string.Format
+		(
+			CommanderSettings._defaultUnknownInputHintTemplate,
+			Command.System.Name.Help
+		);
+	}
+
+	///
 	/// <inheritdoc cref="_writer"/>
 	///
 	public TextWriter Writer
@@ -149,26 +170,5 @@ public sealed record class CommanderSettings
 			if(string.IsNullOrWhiteSpace(value)) { return; }
 			this._unknownInputHint = value;
 		}
-	}
-
-	///
-	/// <inheritdoc cref="CommanderSettings"/>
-	///
-	public CommanderSettings()
-	{
-		this._writer = Console.Out;
-		this._reader = Console.In;
-
-		this._useAliases = true;
-		this._matchCase = true;
-		this._askForConfirmation = false;
-
-		this._inputPrompt = CommanderSettings._defaultInputPrompt;
-		this._confirmationPrompt = CommanderSettings._defaultConfirmationPrompt;
-		this._unknownInputHint = string.Format
-		(
-			CommanderSettings._defaultUnknownInputHintTemplate,
-			Command.System.Name.Help
-		);
 	}
 }

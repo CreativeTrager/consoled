@@ -8,6 +8,14 @@ namespace Rumble.Commander.Commands;
 public sealed partial class Command : ICommand
 {
 	///
+	/// <inheritdoc cref="Command" />
+	///
+	public Command()
+	{
+		// Empty.
+	}
+
+	///
 	/// <inheritdoc />
 	///
 	public required Action Action { get; init; }
@@ -16,14 +24,6 @@ public sealed partial class Command : ICommand
 	/// <inheritdoc />
 	///
 	public required CommandSettings Settings { get; init; }
-
-	///
-	/// <inheritdoc cref="Command" />
-	///
-	public Command()
-	{
-		// Empty.
-	}
 }
 
 ///
@@ -31,6 +31,14 @@ public sealed partial class Command : ICommand
 ///
 public sealed class Command<TCommandable> : ICommand<TCommandable>
 {
+	///
+	/// <inheritdoc cref="Command{TCommandable}" />
+	///
+	public Command()
+	{
+		// Empty.
+	}
+
 	///
 	/// <inheritdoc />
 	///
@@ -40,12 +48,4 @@ public sealed class Command<TCommandable> : ICommand<TCommandable>
 	/// <inheritdoc />
 	///
 	public required CommandSettings Settings { get; init; }
-
-	///
-	/// <inheritdoc cref="Command{TCommandable}" />
-	///
-	public Command()
-	{
-		// Empty.
-	}
 }

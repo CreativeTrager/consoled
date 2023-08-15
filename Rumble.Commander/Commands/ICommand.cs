@@ -23,6 +23,5 @@ public interface ICommand<TCommandable> : ICommandSettingsContainer
 	///
 	/// <inheritdoc cref="ICommand.Action"/>
 	///
-	/// <typeparam name="TCommandable">Type of a commandable object the command operates on.</typeparam>
 	Action<TCommandable> Action { get; init; }
 }

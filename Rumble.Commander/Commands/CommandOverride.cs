@@ -5,8 +5,16 @@ namespace Rumble.Commander.Commands;
 /// <summary>
 /// Settings overrides for <see cref="ICommand"/>.
 /// </summary>
-public sealed class CommandOverride
+public sealed record class CommandOverride
 {
+	///
+	/// <inheritdoc cref="CommandOverride"/>
+	///
+	public CommandOverride()
+	{
+		this.Aliases = new ();
+	}
+
 	///
 	/// <inheritdoc cref="CommandSettings.Aliases"/>
 	///
@@ -31,12 +39,4 @@ public sealed class CommandOverride
 	/// <inheritdoc cref="CommandSettings.AskForConfirmation"/>
 	///
 	public bool? AskForConfirmation { get; init; }
-
-	///
-	/// <inheritdoc cref="CommandOverride"/>
-	///
-	public CommandOverride()
-	{
-		this.Aliases = new ();
-	}
 }

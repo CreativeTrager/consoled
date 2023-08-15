@@ -5,27 +5,49 @@ using System.Linq.Expressions;
 
 namespace Rumble.Commander.Questions;
 
-internal class QuestionResult : IQuestionResult
+///
+/// <inheritdoc />
+///
+internal record class QuestionResult : IQuestionResult
 {
+	///
+	/// <inheritdoc cref="QuestionResult"/>
+	///
 	public QuestionResult()
 	{
 		this.Answer = string.Empty;
 	}
 
+	///
+	/// <inheritdoc />
+	///
 	public string Answer { get; init; }
+
+	///
+	/// <inheritdoc />
+	///
 	public bool IsCorrect { get; init; }
 }
 
-internal sealed class QuestionResult<TCheckTable> : QuestionResult, IQuestionResult<TCheckTable>
+///
+/// <inheritdoc cref="IQuestionResult{TCheckTable}"/>
+///
+internal sealed record class QuestionResult<TCheckTable> : QuestionResult, IQuestionResult<TCheckTable>
 where TCheckTable : ICheckTable, new()
 {
+	///
+	/// <inheritdoc cref="QuestionResult{TCheckTable}"/>
+	///
 	public QuestionResult()
 	{
 		// Empty.
 	}
 
-	public bool Is(Expression<Func<TCheckTable, IEnumerable<string>>> check)
+	///
+	/// <inheritdoc />
+	///
+	public bool Is(Expression<Func<TCheckTable, IEnumerable<string>>> checkGroupProvider)
 	{
-		return check.Compile().Invoke(new ()).Contains(Answer);
+		return checkGroupProvider.Compile().Invoke(new ()).Contains(Answer);
 	}
 }

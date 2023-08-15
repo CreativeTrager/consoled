@@ -254,32 +254,32 @@ public abstract class Commander : ICommander
 			var askForConfirmation = commandWithNames.Command.Settings.AskForConfirmation ?? this._settings.AskForConfirmation;
 			if (askForConfirmation)
 			{
-				var confirmationResult = default(IQuestionResult<YesNoQuestion.YesNoAnswersTable>);
+				var confirmationResult = default(IQuestionResult<YesNoAnswersTable>);
 				var confirmationPrompt = commandWithNames.Command.Settings.ConfirmationPrompt ?? this._settings.ConfirmationPrompt;
 
 				while (true)
 				{
-					confirmationResult = new YesNoQuestion(confirmationPrompt, questionSettings).Ask();
+					confirmationResult = new Question<YesNoAnswersTable>(confirmationPrompt, questionSettings).Ask();
 					if (confirmationResult is { IsCorrect: true })
 					{
 						break;
 					}
 				}
 
-				if (confirmationResult.Is(answers => answers.YesFlat) is false)
+				if (confirmationResult.Is(answers => answers.Yes) is false)
 				{
 					continue;
 				}
 			}
 
 			var commandName = commandWithNames.Command.Settings.Name;
-			if(_systemCommandsDictionary.TryGetValue(commandName, out var systemCommand))
+			if(this._systemCommandsDictionary.TryGetValue(commandName, out var systemCommand))
 			{
 				systemCommand.Action.Invoke();
 			}
 			else
 			{
-				ExecuteCustomCommandByName(commandName);
+				this.ExecuteCustomCommandByName(commandName);
 			}
 		}
 

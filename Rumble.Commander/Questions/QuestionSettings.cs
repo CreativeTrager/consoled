@@ -7,6 +7,15 @@ namespace Rumble.Commander.Questions;
 /// </summary>
 internal sealed record class QuestionSettings
 {
+	///
+	/// <inheritdoc cref="QuestionSettings"/>
+	///
+	internal QuestionSettings()
+	{
+		this.MatchCase = false;
+		this.InputPrefix = ">";
+	}
+
 	/// <summary>
 	/// Writer of the question.
 	/// </summary>
@@ -27,13 +36,4 @@ internal sealed record class QuestionSettings
 	/// Prefix to indicate the input request.
 	/// </summary>
 	public string InputPrefix { get; set; }
-
-	///
-	/// <inheritdoc cref="QuestionSettings"/>
-	///
-	internal QuestionSettings()
-	{
-		this.MatchCase = false;
-		this.InputPrefix = ">";
-	}
 }

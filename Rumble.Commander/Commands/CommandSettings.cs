@@ -10,6 +10,14 @@ namespace Rumble.Commander.Commands;
 /// </summary>
 public sealed record class CommandSettings
 {
+	///
+	/// <inheritdoc cref="Command" />
+	///
+	public CommandSettings()
+	{
+		this.Aliases = new ();
+	}
+
 	/// <summary>
 	/// Name of the command.
 	/// </summary>
@@ -55,14 +63,6 @@ public sealed record class CommandSettings
 	/// Set the value to override the default behavior for this particular command.
 	/// </remarks>
 	public bool? MatchCase { get; set; }
-
-	///
-	/// <inheritdoc cref="Command" />
-	///
-	public CommandSettings()
-	{
-		this.Aliases = new ();
-	}
 
 	/// <summary>
 	/// <see cref="Name"/> with <see cref="Aliases"/> represented in one collection.
