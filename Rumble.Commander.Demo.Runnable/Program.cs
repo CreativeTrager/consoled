@@ -1,84 +1,79 @@
-﻿using System;
-using System.IO;
-using Rumble.Commander.Commanders;
+﻿using Rumble.Commander.Commanders;
 using Rumble.Commander.Commands;
+using Rumble.Commander.Demo.Runnable;
 
-using var commonCommander = new ObjectCommander<StreamReader>(File.OpenText("test.txt"))
+// There are 2 different commanders for now: CommonCommander and ObjectCommander.
+// Here is the usage example of one of the commanders – ObjectCommander.
+
+using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
 {
 	Settings = new ()
 	{
-		Writer = Console.Out,
-		Reader = Console.In,
+		// Default values can be overridden...
+		InputPrompt = "Please, enter the command",
 
-		InputPrompt = "Please, enter a command",
-		ConfirmationPrompt = "Should the command be executed?",
+		// ...or left as they are (can be omitted).
+		ConfirmationPrompt = default!,
+		UnknownInputHint = default!,
 
+		// Extra tweaks also have default values
+		// but available for override even for specific command.
 		UseAliases = true,
 		MatchCase = true,
-		AskForConfirmation = true
+		AskForConfirmation = false
 	},
-
-	SystemCommandsOverrides = new ()
-	{
-		[Command.System.Name.Quit] = new ()
-		{
-			Aliases = new () { "qq" },
-			ConfirmationPrompt = "Are you sure you want to quit?",
-
-			UseAliases = true,
-			MatchCase = true,
-			AskForConfirmation = true
-		}
-	},
-
 	CustomCommands = new ()
 	{
 		new ()
 		{
-			Action = reader =>
-			{
-				Console.WriteLine(reader.ReadLine());
-			},
+			Action = commandable => commandable.Initialize(),
 			Settings = new ()
 			{
-				Name = "read-line",
-				Aliases = new () { "rl" },
-				ConfirmationPrompt = "Are you sure to execute common1?",
+				Name = "initialize",
+				Aliases = new () { "init" },
 
-				UseAliases = true,
-				MatchCase = true,
-				AskForConfirmation = true
+				// Commander will NOT use the aliases of this specific command.
+				UseAliases = false
 			}
 		},
 		new ()
 		{
-			Action = reader =>
-			{
-				Console.WriteLine(reader.ReadToEnd());
-			},
+			Action = commandable => commandable.Start(),
 			Settings = new ()
 			{
-				Name = "read-to-end",
-				Aliases = new () { "rte" },
-				UseAliases = false,
-				MatchCase = false,
-				AskForConfirmation = true
+				Name = "start",
+				Aliases = new () { "begin", "run" },
+
+				// Commander WILL treat "Start", "rUn" etc. as valid command names.
+				MatchCase = false
 			}
 		},
 		new ()
 		{
-			Action = reader =>
-			{
-				reader.BaseStream.Seek(0, SeekOrigin.Begin);
-				reader.DiscardBufferedData();
-			},
+			Action = commandable => commandable.Stop(),
 			Settings = new ()
 			{
-				Name = "reset",
-				UseAliases = false,
-				MatchCase = false,
-				AskForConfirmation = true
+				Name = "stop",
+				Aliases = new () { "terminate" },
+
+				// Commander WILL ask for confirmation.
+				// This overrides behaviour specified on Commander level.
+				AskForConfirmation = true,
+				ConfirmationPrompt = "This command will STOP the server. Are you sure?"
 			}
 		}
+	},
+
+	// System commands such as "help" or "quit" can be overridden.
+	// All parameters are available for override EXCEPT Action and Name.
+	SystemCommandsOverrides = new ()
+	{
+		[Command.System.Name.Quit] = new ()
+		{
+			Aliases = new () { "release", "exit", "qq" },
+			ConfirmationPrompt = "You are about to QUIT the current commander. Do you confirm?"
+		}
 	}
+
+// Commander has to be run after the configuration.
 }.Run();

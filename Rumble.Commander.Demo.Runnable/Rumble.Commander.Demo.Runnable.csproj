@@ -56,9 +56,6 @@
 			<DependentUpon>appsettings.json</DependentUpon>
 		</Content>
 
-		<None Update="test.txt">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 
 	</ItemGroup>
 
