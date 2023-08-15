@@ -88,19 +88,63 @@ public sealed record class CommanderSettings
 		);
 	}
 
+	/// <summary>
+	/// Provider for the <see cref="Writer"/>.
+	/// </summary>
+	/// <exception cref="ArgumentNullException">Thrown, if "<paramref name="value"/>" is null.</exception>
+	public Func<TextWriter> WriterProvider
+	{
+		init
+		{
+			// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+			if(value is null)
+			{
+				throw new ArgumentNullException
+				(
+					paramName: nameof(value),
+					message: $"Commander settings can't be composed. Writer provider is null."
+				);
+			}
+
+			this._writer = value.Invoke();
+		}
+	}
+
 	///
 	/// <inheritdoc cref="_writer"/>
 	///
-	public TextWriter Writer
+	internal TextWriter Writer
 	{
 		get => this._writer;
 		init => this._writer = value;
 	}
 
+	/// <summary>
+	/// Provider for the <see cref="Reader"/>.
+	/// </summary>
+	/// <exception cref="ArgumentNullException">Thrown, if "<paramref name="value"/>" is null.</exception>
+	public Func<TextReader> ReaderProvider
+	{
+		init
+		{
+			// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+			if(value is null)
+			{
+				throw new ArgumentNullException
+				(
+					paramName: nameof(value),
+					message: $"Commander settings can't be composed. Reader provider is null."
+				);
+			}
+
+			this._reader = value.Invoke();
+		}
+	}
+
 	///
 	/// <inheritdoc cref="_reader"/>
 	///
-	public TextReader Reader
+	internal TextReader Reader
 	{
 		get => this._reader;
 		init => this._reader = value;
