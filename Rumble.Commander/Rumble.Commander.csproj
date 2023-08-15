@@ -14,10 +14,10 @@
 	<PropertyGroup>
 		<PackageId>Rumble.Commander</PackageId>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>0.0.2</Version>
-		<AssemblyVersion>0.0.2</AssemblyVersion>
-		<FileVersion>0.0.2.1</FileVersion>
-		<Title>Bozosort</Title>
+		<Version>0.0.1</Version>
+		<AssemblyVersion>0.0.1</AssemblyVersion>
+		<FileVersion>0.0.1</FileVersion>
+		<Title>Commander</Title>
 		<Authors>Roman Malyi</Authors>
 		<Copyright>Copyright (c) Roman Malyi 2023.</Copyright>
 		<RepositoryUrl>https://github.com/rumrunner0/commander</RepositoryUrl>
