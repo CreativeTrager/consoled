@@ -6,7 +6,7 @@ This repository contains the `Rumble.Commander` class library and `Rumble.Comman
 [![NuGet Package: Rumble.Commander](https://img.shields.io/nuget/vpre/Rumble.Commander?label=nuget%3A%20Rumble.Commander)](https://www.nuget.org/packages/Rumble.Commander)
 
 ## Description
-The `Rumble.Commander` is a configurable console command control program. Designed to provide an intuitive interface to control console applications, `Rumble.Commander` allows developers to define specific actions, aliases, confirmation prompts, and more. The library is quite simple so it can be improved in many ways.
+The `Rumble.Commander` is a configurable console command control program. Designed as a command-based utility to provide an intuitive interface to control console applications, `Rumble.Commander` allows developers to define specific actions, aliases, confirmation prompts, and more. The library is quite simple so it can be improved in many ways.
 
 The `Rumble.Commander.Demo.Runnable` is a console application demonstrating the usage of the `Rumble.Commander` library.
 
@@ -26,7 +26,7 @@ using var commonCommander = new CommonCommander()
 // Usage of the ObjectCommander.
 // Replase the object with your real object to "control" it.
 // See the Demo project for an extended example.
-using var commonCommander = new ObjectCommander<object>(new object())
+using var objectCommander = new ObjectCommander<object>(new object())
 {
     // Configuration code here...
 }.Run();
