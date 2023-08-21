@@ -3,7 +3,8 @@ A simple and intuitive console library to control console applications via comma
 
 This repository contains the `Rumble.Commander` class library and `Rumble.Commander.Demo` demo project. All the content in the repository is an original work created to simplify the control of console applications in the .NET ecosystem.
 
-[![NuGet Package: Rumble.Commander](https://img.shields.io/nuget/vpre/Rumble.Commander?label=nuget%3A%20Rumble.Commander)](https://www.nuget.org/packages/Rumble.Commander)
+[![License](https://img.shields.io/github/license/rumrunner0/commander?label=license)](https://github.com/rumrunner0/commander/blob/main/LICENSE)
+[![Nuget](https://img.shields.io/nuget/vpre/Rumble.Commander?label=nuget)](https://www.nuget.org/packages/Rumble.Commander)
 
 ## Description
 The `Rumble.Commander` is incredibly simple but highly configurable console command control program. Designed as a command-based utility to provide an intuitive interface to control console applications, `Rumble.Commander` allows developers to define specific actions, aliases, confirmation prompts, and more. The library is quite simple so it can be improved in many ways.
