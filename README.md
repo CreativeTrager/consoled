@@ -101,6 +101,3 @@ The Commander project is developed with an emphasis on flexibility and robustnes
 
 ## Contributing
 If you have any suggestions, ideas, or feedback to enhance the project, please feel free to create an issue. Your collaboration is welcomed to make this project more powerful and efficient.
-
-## Note
-The code is 100% original.
