@@ -1,25 +1,27 @@
 # commander
 A simple and intuitive console library to control console applications via commander objects like `CommonCommander` and `ObjectCommander`.
 
-This repository contains the `Rumble.Commander` class library and `Rumble.Commander.Demo` demo project. All the content in the repository is an original work created to simplify the control of console applications in the .NET ecosystem.
+This repository contains the `Rumrunner0.Commander` class library and `Rumrunner0.Commander.Demo` demo project. All the content in the repository is an original work created to simplify the control of console applications in the .NET ecosystem.
 
 [![License](https://img.shields.io/github/license/rumrunner0/commander?label=license)](https://github.com/rumrunner0/commander/blob/main/LICENSE)
-[![Nuget](https://img.shields.io/nuget/v/Rumble.Commander?label=nuget)](https://www.nuget.org/packages/Rumble.Commander)
+[![Nuget](https://img.shields.io/nuget/v/Rumrunner0.Commander?label=nuget)](https://www.nuget.org/packages/Rumrunner0.Commander)
 
 ## Description
-The `Rumble.Commander` is incredibly simple but highly configurable console command control program. Designed as a command-based utility to provide an intuitive interface to control console applications, `Rumble.Commander` allows developers to define specific actions, aliases, confirmation prompts, and more. The library is quite simple so it can be improved in many ways.
+The `Rumrunner0.Commander` is incredibly simple but highly configurable console command control program. Designed as a command-based utility to provide an intuitive interface to control console applications, `Rumrunner0.Commander` allows developers to define specific actions, aliases, confirmation prompts, and more. The library is quite simple so it can be improved in many ways.
 
-The `Rumble.Commander.Demo.Runnable` is a console application demonstrating the usage of the `Rumble.Commander` library.
+The `Rumrunner0.Commander.Demo.Runnable` is a console application demonstrating the usage of the `Rumrunner0.Commander` library.
 
 ## Usage
 
-### Rumble.Commander Library
+### Rumrunner0.Commander Library
 ```csharp
-using Rumble.Commander.Commanders;
-using Rumble.Commander.Commands;
-using Rumble.Commander.Demo.Runnable;
+using Rumrunner0.Commander.Commanders;
+using Rumrunner0.Commander.Commands;
+using Rumrunner0.Commander.Demo.Runnable;
 
-using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
+// There are 2 different commanders for now: CommonCommander and ObjectCommander.
+// Here is usage example of one of the commanders – ObjectCommander.
+using var commander = new ObjectCommander<DummyServer>(new DummyServer())
 {
     Settings = new ()
     {
@@ -36,15 +38,15 @@ using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
         MatchCase = true,
         AskForConfirmation = false
     },
-    CustomCommands = new ()
-    {
+    CustomCommands =
+    [
         new ()
         {
             Action = commandable => commandable.Initialize(),
             Settings = new ()
             {
                 Name = "initialize",
-                Aliases = new () { "init" },
+                Aliases = [ "init" ],
 
                 // Commander will NOT use the aliases of this specific command.
                 UseAliases = false
@@ -56,7 +58,7 @@ using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
             Settings = new ()
             {
                 Name = "start",
-                Aliases = new () { "begin", "run" },
+                Aliases = [ "begin", "run" ],
 
                 // Commander WILL treat "Start", "rUn" etc. as valid command names.
                 MatchCase = false
@@ -68,7 +70,7 @@ using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
             Settings = new ()
             {
                 Name = "stop",
-                Aliases = new () { "terminate" },
+                Aliases = [ "terminate" ],
 
                 // Commander WILL ask for confirmation.
                 // This overrides behaviour specified on Commander level.
@@ -76,7 +78,7 @@ using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
                 ConfirmationPrompt = "This command will STOP the server. Are you sure?"
             }
         }
-    },
+    ],
 
     // System commands such as "help" or "quit" can be overridden.
     // All parameters are available for override EXCEPT Action and Name.
@@ -84,8 +86,8 @@ using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
     {
         [Command.System.Name.Quit] = new ()
         {
-            Aliases = new () { "release", "exit", "qq" },
-            ConfirmationPrompt = "You are about to QUIT the current commander. Do you confirm?"
+            Aliases = [ "release", "exit", "qq" ],
+            ConfirmationPrompt = "You are about to QUIT the commander. Are you sure?"
         }
     }
 
@@ -93,8 +95,8 @@ using var commonCommander = new ObjectCommander<DummyServer>(new DummyServer())
 }.Run();
 ```
 
-### Rumble.Commander.Demo.Runnable Console Application
-To understand how to utilize the `Rumble.Commander` library, the`Rumble.Commander.Demo` demo project provides comprehensive examples for various use cases. Simply browse the demo project to get started.
+### Rumrunner0.Commander.Demo.Runnable Console Application
+To understand how to utilize the `Rumrunner0.Commander` library, the`Rumrunner0.Commander.Demo` demo project provides comprehensive examples for various use cases. Simply browse the demo project to get started.
 
 ## History
 The Commander project is developed with an emphasis on flexibility and robustness, aiming to provide developers with fine-grained control over console applications in a .NET environment.
