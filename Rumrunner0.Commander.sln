@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rumrunner0.Commander", "Rum
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rumrunner0.Commander.Demo.Runnable", "Rumrunner0.Commander.Demo.Runnable\Rumrunner0.Commander.Demo.Runnable.csproj", "{B69D6211-8DC6-4ECD-A4FC-CCB36D1F70CC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{545B907C-E018-45B1-AF6F-9C417BCEEEFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
