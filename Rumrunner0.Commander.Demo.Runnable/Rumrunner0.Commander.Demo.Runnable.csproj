@@ -64,4 +64,8 @@
 		<ProjectReference Include="..\Rumrunner0.Commander\Rumrunner0.Commander.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Rumrunner0.UuMatter.Console" Version="0.1.6" />
+	</ItemGroup>
+
 </Project>
